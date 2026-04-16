@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edwards Treasury Hub — Vision</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Merriweather+Sans:wght@300;400;600;700&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --edwards-red: #C8102E;
+    --edwards-red-glow: rgba(200, 16, 46, 0.6);
+    --dark-gray: #505759;
+    --bg-dark: #0c0c18;
+    --bg-section: #f8f7f5;
+    --bg-white: #ffffff;
+    --text-primary: #1a1a2e;
+    --text-secondary: #505759;
+    --text-on-dark: #f0eee9;
+    --text-on-dark-sub: rgba(240, 238, 233, 0.72);
+    --text-muted-dark: rgba(240, 238, 233, 0.35);
+    --font-serif: 'Merriweather', Georgia, 'Times New Roman', serif;
+    --font-sans: 'Merriweather Sans', 'Helvetica Neue', Arial, sans-serif;
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font-sans); background: var(--bg-white); color: var(--text-primary); overflow-x: hidden; }
+
+  /* ==================== ICONS (inline SVG helper) ==================== */
+  .icon { display: inline-block; width: 28px; height: 28px; margin-right: 10px; vertical-align: middle; flex-shrink: 0; }
+  .icon-lg { width: 36px; height: 36px; margin-right: 14px; }
+  .icon svg { width: 100%; height: 100%; }
+
+  /* ==================== QUOTE PAGE ==================== */
+  #quote-page {
+    position: relative; width: 100vw; height: 100vh;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    background: var(--bg-dark); cursor: pointer; z-index: 100;
+  }
+  #quote-page .quote-text {
+    max-width: 700px; padding: 0 40px; text-align: center;
+    opacity: 0; transform: translateY(20px); animation: fadeInUp 2s ease-out 0.5s forwards;
+  }
+  #quote-page blockquote {
+    font-family: var(--font-serif); font-style: italic; font-weight: 300;
+    font-size: 1.4rem; line-height: 2.1; color: var(--text-on-dark); letter-spacing: 0.02em;
+  }
+  #quote-page .quote-attr {
+    margin-top: 32px; font-family: var(--font-serif); font-weight: 400;
+    font-size: 0.9rem; color: var(--text-muted-dark); letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  #quote-page .enter-cue {
+    position: absolute; bottom: 120px; font-family: var(--font-sans); font-size: 0.85rem;
+    color: rgba(255,255,255,0.45); letter-spacing: 0.22em; text-transform: uppercase;
+    opacity: 0; animation: fadeInCue 1.5s ease-out 3.5s forwards;
+    border: 1px solid rgba(255,255,255,0.15); padding: 10px 32px; border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  #quote-page .enter-cue:hover { color: #fff; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.06); }
+  @keyframes fadeInCue { to { opacity: 1; } }
+  .arrow-bounce { display: inline-block; margin-left: 8px; animation: bounceRight 1.5s ease-in-out infinite; }
+
+  /* ==================== SIDEBAR ==================== */
+  #sidebar {
+    position: fixed; left: 0; top: 0; width: 220px; height: 100vh;
+    background: var(--bg-white); border-right: 1px solid #e5e5e5;
+    padding: 30px 0; z-index: 50; transform: translateX(0);
+    transition: transform 0.5s var(--ease); overflow-y: auto;
+  }
+  #sidebar.hidden { transform: translateX(-240px); }
+  #sidebar .logo {
+    padding: 0 24px 24px; font-weight: 700; font-size: 0.72rem;
+    color: var(--edwards-red); letter-spacing: 0.12em; text-transform: uppercase;
+    border-bottom: 1px solid #e5e5e5; margin-bottom: 20px;
+  }
+  #sidebar a {
+    display: block; padding: 10px 24px; font-size: 0.8rem; font-weight: 400;
+    color: var(--text-secondary); text-decoration: none;
+    transition: all 0.3s var(--ease); border-left: 3px solid transparent;
+  }
+  #sidebar a:hover, #sidebar a.active {
+    color: var(--edwards-red); border-left-color: var(--edwards-red); background: rgba(200,16,46,0.04);
+  }
+
+  /* ==================== DECK CONTENT ==================== */
+  #deck-content { display: none; opacity: 0; transition: opacity 0.8s ease; }
+  #deck-content.visible { display: block; opacity: 1; }
+
+  /* Chapter sections */
+  .chapter-section {
+    margin-left: 220px; min-height: 100vh; padding: 80px 60px 80px 80px;
+  }
+  .chapter-label {
+    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--edwards-red); margin-bottom: 12px;
+  }
+  .chapter-title {
+    font-family: var(--font-serif); font-size: 2.1rem; font-weight: 700;
+    line-height: 1.35; margin-bottom: 28px; color: inherit;
+  }
+  .chapter-section p {
+    font-size: 0.95rem; line-height: 1.85; margin-bottom: 18px; max-width: 660px; color: inherit;
+  }
+  .chapter-section h3 {
+    font-weight: 600; font-size: 1.05rem; margin: 32px 0 12px; color: inherit;
+    display: flex; align-items: center;
+  }
+
+  /* Highlight box */
+  .highlight-box {
+    background: rgba(200,16,46,0.06); border-left: 4px solid var(--edwards-red);
+    padding: 18px 22px; margin: 20px 0; max-width: 660px; border-radius: 0 8px 8px 0;
+  }
+  .highlight-box p { font-family: var(--font-serif); font-style: italic; margin-bottom: 0; font-size: 0.95rem; }
+
+  /* ==================== CH2 PAIN CARDS ==================== */
+  .pain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 720px; margin: 20px 0; }
+  .pain-card {
+    background: var(--bg-white); border: 1px solid #e5e5e5; border-radius: 10px;
+    padding: 18px 18px 16px; display: flex; align-items: flex-start; gap: 12px;
+  }
+  .pain-card .pain-icon {
+    width: 32px; height: 32px; flex-shrink: 0; margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(200,16,46,0.08); border-radius: 8px; color: var(--edwards-red);
+  }
+  .pain-card .pain-icon svg { width: 18px; height: 18px; }
+  .pain-card .pain-body {}
+  .pain-card .pain-domain { font-weight: 600; font-size: 0.82rem; color: var(--edwards-red); margin-bottom: 4px; }
+  .pain-card p { font-size: 0.84rem; line-height: 1.55; margin-bottom: 0; color: var(--text-secondary); }
+
+  /* ==================== CH3 VISION CARDS ==================== */
+  .vision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 720px; margin: 24px 0; }
+  .vision-card {
+    background: var(--bg-white); border: 1px solid #ebebeb; border-radius: 10px;
+    padding: 22px 20px; transition: box-shadow 0.3s;
+  }
+  .vision-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+  .vision-card h4 {
+    font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+  }
+  .vision-card h4 .v-icon { color: var(--edwards-red); display: flex; }
+  .vision-card h4 .v-icon svg { width: 20px; height: 20px; }
+  .vision-card p { font-size: 0.85rem; line-height: 1.65; color: var(--text-secondary); margin-bottom: 0; }
+
+  /* ==================== CH5 ARCHITECTURE (styled) ==================== */
+  .arch-container { max-width: 720px; margin: 28px 0; }
+  .arch-layer {
+    background: var(--bg-white); border: 1px solid #e5e5e5; border-radius: 12px;
+    padding: 20px 24px; margin-bottom: 12px; position: relative;
+  }
+  .arch-layer-label {
+    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--edwards-red); margin-bottom: 6px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .arch-layer-label svg { width: 16px; height: 16px; color: var(--edwards-red); }
+  .arch-layer p { font-size: 0.85rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 0; }
+  .arch-connector {
+    width: 2px; height: 12px; background: var(--edwards-red); opacity: 0.3;
+    margin: 0 auto; position: relative;
+  }
+  .arch-connector::after {
+    content: ''; position: absolute; bottom: -3px; left: -3px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--edwards-red); opacity: 0.4;
+  }
+  .arch-sources {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px;
+  }
+  .arch-source-tag {
+    font-size: 0.72rem; padding: 4px 12px; border-radius: 20px;
+    background: rgba(200,16,46,0.07); color: var(--edwards-red); font-weight: 500;
+  }
+
+  /* Principles — icon + text, compact */
+  .principle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 720px; margin: 20px 0; }
+  .principle-card {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 16px; background: var(--bg-white); border: 1px solid #ebebeb; border-radius: 10px;
+  }
+  .principle-icon {
+    width: 32px; height: 32px; flex-shrink: 0; display: flex; align-items: center;
+    justify-content: center; background: rgba(200,16,46,0.07); border-radius: 8px;
+    color: var(--edwards-red);
+  }
+  .principle-icon svg { width: 16px; height: 16px; }
+  .principle-card h4 { font-size: 0.82rem; font-weight: 600; margin-bottom: 4px; }
+  .principle-card p { font-size: 0.8rem; line-height: 1.55; color: var(--text-secondary); margin-bottom: 0; }
+
+  /* ==================== CH6 HOME PAGE MOCK ==================== */
+  .home-mock {
+    max-width: 720px; margin: 24px 0; background: var(--bg-white);
+    border: 1px solid #e5e5e5; border-radius: 12px; overflow: hidden;
+  }
+  .home-mock-bar {
+    background: var(--edwards-red); color: white; padding: 14px 20px;
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .home-mock-bar svg { width: 16px; height: 16px; }
+  .home-mock-grid { display: grid; grid-template-columns: 1fr 1fr; }
+  .home-mock-cell {
+    padding: 18px 20px; border-bottom: 1px solid #f0f0f0; border-right: 1px solid #f0f0f0;
+  }
+  .home-mock-cell:nth-child(even) { border-right: none; }
+  .home-mock-cell h4 {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--edwards-red); margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
+  }
+  .home-mock-cell h4 svg { width: 14px; height: 14px; }
+  .home-mock-cell p { font-size: 0.82rem; line-height: 1.55; color: var(--text-secondary); margin-bottom: 0; }
+
+  /* ==================== CH7 IMPACT TABLE ==================== */
+  .impact-table { width: 100%; max-width: 720px; border-collapse: collapse; margin: 20px 0; font-size: 0.85rem; }
+  .impact-table th {
+    text-align: left; padding: 10px 14px; font-weight: 600; font-size: 0.7rem;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--edwards-red);
+    border-bottom: 2px solid var(--edwards-red);
+  }
+  .impact-table td { padding: 10px 14px; border-bottom: 1px solid #e5e5e5; vertical-align: top; line-height: 1.55; }
+
+  .role-card {
+    display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; max-width: 660px;
+  }
+  .role-icon {
+    width: 32px; height: 32px; flex-shrink: 0; display: flex; align-items: center;
+    justify-content: center; background: rgba(200,16,46,0.07); border-radius: 8px; color: var(--edwards-red);
+  }
+  .role-icon svg { width: 16px; height: 16px; }
+  .role-card h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 2px; }
+  .role-card p { font-size: 0.84rem; line-height: 1.55; color: var(--text-secondary); margin-bottom: 0; }
+
+  /* ==================== CH8 CLOSING — LETTER STYLE ==================== */
+  .closing-page {
+    width: 100vw; min-height: 100vh; display: flex; justify-content: center; align-items: center;
+    background: var(--bg-dark); margin-left: 0 !important; max-width: 100% !important; padding: 60px 40px;
+  }
+  .letter-card {
+    background: #faf9f6; border-radius: 4px; max-width: 680px; padding: 64px 60px 52px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5); position: relative;
+    background-image: repeating-linear-gradient(transparent, transparent 31px, rgba(200,16,46,0.04) 31px, rgba(200,16,46,0.04) 32px);
+    background-position-y: 58px;
+  }
+  .letter-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--edwards-red); border-radius: 4px 4px 0 0;
+  }
+  .letter-body {
+    font-family: 'Caveat', cursive;
+    font-size: 1.92rem; line-height: 1.85; color: #2c2c2c; letter-spacing: 0.01em;
+    margin-bottom: 36px; font-weight: 500;
+  }
+  .letter-closing-quote {
+    font-family: 'Caveat', cursive; font-size: 1.98rem; font-weight: 600;
+    color: var(--edwards-red); line-height: 1.7; margin-bottom: 44px; text-align: center;
+  }
+  .letter-sig { border-top: 1px solid #e5e5e5; padding-top: 28px; }
+  .letter-sig .sig-name {
+    font-family: 'Caveat', cursive; font-weight: 700; font-size: 2.4rem;
+    color: var(--text-primary); margin-bottom: 6px;
+  }
+  .letter-sig .sig-detail {
+    font-family: 'Merriweather Sans', sans-serif;
+    font-size: 1.08rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0;
+    letter-spacing: 0.04em;
+  }
+
+  /* ==================== SOLAR SYSTEM ==================== */
+  #solar-system-container {
+    display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: #080816; z-index: 200;
+  }
+  #solar-system-container.active { display: block; }
+  #solar-canvas { width: 100%; height: 100%; }
+  #solar-bottom-hints {
+    position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+    text-align: center; pointer-events: none; z-index: 10;
+  }
+  #solar-hint {
+    font-family: var(--font-sans); font-size: 0.88rem; font-weight: 300;
+    color: rgba(0,210,255,0.7); letter-spacing: 0.15em; text-transform: uppercase;
+    transition: opacity 1s ease; margin-bottom: 8px;
+    text-shadow: 0 0 16px rgba(0,210,255,0.25);
+  }
+  #planet-progress {
+    font-size: 0.78rem; font-weight: 300;
+    color: rgba(180,200,220,0.5); letter-spacing: 0.12em;
+    transition: opacity 0.5s ease;
+  }
+  #sun-hint {
+    font-family: var(--font-sans); font-size: 0.92rem; font-weight: 400;
+    color: rgba(255,180,50,0.9); letter-spacing: 0.15em; text-transform: uppercase;
+    opacity: 0; transition: opacity 1s ease;
+    text-shadow: 0 0 24px rgba(255,180,50,0.4);
+    margin-top: 8px;
+  }
+  #sun-hint.visible { animation: hintPulse 2s ease-in-out infinite; }
+  @keyframes hintPulse { 0%,100%{opacity:0.9;} 50%{opacity:0.5;} }
+
+  /* Planet panel */
+  #planet-panel {
+    position: absolute; top: 0; right: 0; width: 50%; height: 100vh;
+    background: rgba(6,8,20,0.92); backdrop-filter: blur(24px);
+    padding: 60px 48px; overflow-y: auto;
+    transform: translateX(100%); transition: transform 0.6s var(--ease);
+    border-left: 1px solid rgba(255,255,255,0.06);
+  }
+  #planet-panel.open { transform: translateX(0); }
+  .panel-domain {
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--edwards-red); margin-bottom: 10px;
+  }
+  .panel-title {
+    font-family: var(--font-sans); font-size: 1.8rem; font-weight: 700;
+    color: #ffffff; margin-bottom: 20px; line-height: 1.3; letter-spacing: -0.01em;
+  }
+  .panel-section-label {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--edwards-red); margin-top: 28px; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+    padding-bottom: 8px; border-bottom: 1px solid rgba(200,16,46,0.15);
+  }
+  .panel-section-label svg { width: 16px; height: 16px; }
+  .panel-text {
+    font-size: 1.02rem; line-height: 1.85; color: rgba(220,225,235,0.85); margin-bottom: 12px;
+    font-family: var(--font-sans); font-weight: 300;
+  }
+  /* Visual flow diagram in panels — large, prominent */
+  .panel-flow {
+    display: flex; align-items: stretch; gap: 0; margin: 20px 0 24px; flex-wrap: wrap;
+  }
+  .panel-flow-step {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 16px 18px 14px; min-width: 0; flex: 1;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px; text-align: center;
+    font-size: 0.82rem; font-weight: 400; color: rgba(220,225,235,0.85);
+  }
+  .panel-flow-step svg { width: 24px; height: 24px; color: var(--edwards-red); flex-shrink: 0; }
+  .panel-flow-arrow {
+    color: rgba(0,210,255,0.6); font-size: 1.2rem; margin: 0 2px;
+    display: flex; align-items: center; font-weight: 300;
+  }
+  .panel-big-icon {
+    display: flex; align-items: center; justify-content: center;
+    width: 72px; height: 72px; border-radius: 18px; margin-bottom: 18px;
+    background: rgba(200,16,46,0.12); border: 1px solid rgba(200,16,46,0.2);
+    box-shadow: 0 0 24px rgba(200,16,46,0.08);
+  }
+  .panel-big-icon svg { width: 36px; height: 36px; color: var(--edwards-red); }
+  .ai-ladder {
+    display: inline-block; padding: 6px 18px; border-radius: 20px;
+    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; margin-top: 10px;
+  }
+  .ladder-observe { background: rgba(100,181,246,0.15); color: #90caf9; }
+  .ladder-alert { background: rgba(255,183,77,0.15); color: #ffcc80; }
+  .ladder-advise { background: rgba(129,199,132,0.15); color: #a5d6a7; }
+  .ladder-execute { background: rgba(200,16,46,0.15); color: #ef9a9a; }
+
+  .panel-back-btn {
+    position: absolute; top: 24px; left: 24px; background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(240,238,233,0.15); color: rgba(220,225,235,0.8);
+    font-size: 0.85rem; padding: 10px 22px; border-radius: 8px; cursor: pointer;
+    transition: all 0.3s var(--ease); z-index: 10; font-weight: 400;
+  }
+  .panel-back-btn:hover { border-color: rgba(0,210,255,0.4); color: #00ddff; background: rgba(0,210,255,0.06); }
+
+  /* Sun panel — visual cards */
+  #sun-panel {
+    position: absolute; top: 0; right: 0; width: 50%; height: 100vh;
+    background: rgba(6,8,20,0.92); backdrop-filter: blur(24px);
+    padding: 60px 48px; overflow-y: auto;
+    transform: translateX(100%); transition: transform 0.6s var(--ease);
+    border-left: 1px solid rgba(255,255,255,0.06);
+  }
+  #sun-panel.open { transform: translateX(0); }
+  .sun-hero { text-align: center; margin-bottom: 32px; }
+  .sun-hero-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 80px; height: 80px; border-radius: 50%; margin-bottom: 16px;
+    background: radial-gradient(circle, rgba(255,180,50,0.3), rgba(200,16,46,0.15));
+    border: 2px solid rgba(255,180,50,0.3); animation: sunPulseIcon 3s ease-in-out infinite;
+  }
+  .sun-hero-icon svg { width: 40px; height: 40px; color: #ffb84d; }
+  @keyframes sunPulseIcon { 0%,100%{box-shadow:0 0 20px rgba(255,180,50,0.2);} 50%{box-shadow:0 0 40px rgba(255,180,50,0.4);} }
+  .sun-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+  .sun-card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 20px; transition: border-color 0.3s;
+  }
+  .sun-card:hover { border-color: rgba(200,16,46,0.3); }
+  .sun-card-icon { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; margin-bottom: 10px; }
+  .sun-card-icon svg { width: 22px; height: 22px; }
+  .sun-card h4 { font-size: 0.95rem; font-weight: 600; color: #ffffff; margin-bottom: 8px; }
+  .sun-card p { font-size: 0.88rem; line-height: 1.7; color: rgba(220,225,235,0.8); margin: 0; }
+  .sun-module-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+  .sun-module-tag {
+    padding: 5px 14px; border-radius: 20px; font-size: 0.7rem; font-weight: 500;
+    background: rgba(255,255,255,0.06); color: var(--text-on-dark-sub); border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  #continue-btn {
+    position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%);
+    background: var(--edwards-red); color: white; font-size: 0.82rem; font-weight: 600;
+    padding: 12px 36px; border: none; border-radius: 8px; cursor: pointer;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.8s ease, transform 0.3s ease; letter-spacing: 0.05em;
+  }
+  #continue-btn.visible { opacity: 1; pointer-events: auto; }
+  #continue-btn:hover { transform: translateX(-50%) scale(1.04); }
+
+  .enter-solar-btn {
+    display: inline-block; margin-top: 36px; padding: 14px 40px;
+    background: var(--edwards-red); color: white; font-size: 0.88rem;
+    font-weight: 600; border: none; border-radius: 8px; cursor: pointer;
+    letter-spacing: 0.05em; transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .enter-solar-btn:hover { transform: scale(1.04); box-shadow: 0 4px 24px rgba(200,16,46,0.3); }
+
+  .confidential-footer {
+    position: fixed; bottom: 0; left: 0; width: 100%; text-align: center;
+    padding: 8px; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(255,255,255,0.12); z-index: 300; pointer-events: none;
+  }
+
+  /* ==================== PASSWORD GATE ==================== */
+  #password-gate {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: var(--bg-dark); z-index: 999;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+  }
+  #password-gate.hidden { display: none; }
+  .pw-lock-icon {
+    width: 56px; height: 56px; margin-bottom: 28px; opacity: 0.3;
+  }
+  .pw-title {
+    font-family: var(--font-sans); font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.25em; text-transform: uppercase;
+    color: rgba(255,255,255,0.35); margin-bottom: 32px;
+  }
+  .pw-input-wrap {
+    position: relative; width: 280px;
+  }
+  .pw-input-wrap input {
+    width: 100%; padding: 14px 20px; font-family: var(--font-sans);
+    font-size: 1rem; letter-spacing: 0.15em; text-align: center;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; color: #fff; outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .pw-input-wrap input:focus {
+    border-color: rgba(200,16,46,0.5); box-shadow: 0 0 20px rgba(200,16,46,0.1);
+  }
+  .pw-input-wrap input::placeholder { color: rgba(255,255,255,0.15); letter-spacing: 0.1em; }
+  .pw-error {
+    margin-top: 14px; font-size: 0.78rem; color: var(--edwards-red);
+    opacity: 0; transition: opacity 0.3s; height: 20px;
+  }
+  .pw-error.show { opacity: 1; }
+  .pw-hint {
+    position: absolute; bottom: -36px; left: 0; right: 0; text-align: center;
+    font-size: 0.6rem; color: rgba(255,255,255,0.12); letter-spacing: 0.08em;
+  }
+
+  /* ==================== LOCKED CHAPTERS ==================== */
+  .chapter-locked { display: none !important; }
+  #sidebar a.sidebar-locked {
+    color: #ccc; pointer-events: none; opacity: 0.4;
+  }
+  #sidebar a.sidebar-locked:hover { color: #ccc; border-left-color: transparent; background: none; }
+
+  @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { to { opacity: 0.5; } }
+  @keyframes bounceRight { 0%,100% { transform: translateX(0); } 50% { transform: translateX(6px); } }
+
+  @media (max-width: 768px) {
+    #sidebar { display: none; }
+    .chapter-section { margin-left: 0; padding: 40px 20px; }
+    .closing-page { padding: 40px 20px; margin-left: 0 !important; }
+    .letter-card { padding: 40px 28px 36px; max-width: 100%; }
+    #planet-panel, #sun-panel { width: 100%; padding: 50px 24px; }
+    .pain-grid, .vision-grid, .principle-grid { grid-template-columns: 1fr; }
+    .sun-card-grid { grid-template-columns: 1fr; }
+    .home-mock-grid { grid-template-columns: 1fr; }
+    .impact-table { font-size: 0.78rem; }
+    .impact-table th, .impact-table td { padding: 8px 10px; }
+    .panel-flow { flex-direction: column; align-items: stretch; }
+    .panel-flow-arrow { transform: rotate(90deg); align-self: center; margin: 4px 0; }
+    .panel-flow-step { flex-direction: row; }
+    .vision-card[style*="grid-column"] { grid-column: span 1; }
+    .arch-container svg { font-size: 8px; }
+    .enter-solar-btn { width: 100%; }
+    #quote-page blockquote { font-size: 1.1rem; line-height: 1.9; }
+    .chapter-title { font-size: 1.6rem; }
+    .panel-title { font-size: 1.4rem; }
+    /* Ch3 shift-compare responsive */
+    .shift-compare > div:last-child { grid-template-columns: 1fr !important; gap: 0 !important; }
+    .shift-compare > div:last-child > div:first-child { border-radius: 12px 12px 0 0 !important; border-right: 1px solid rgba(200,16,46,0.1) !important; border-bottom: none !important; }
+    .shift-compare > div:last-child > div:nth-child(2) { background: linear-gradient(180deg,#fdf2f3,#edf7ee) !important; padding: 8px 0; }
+    .shift-compare > div:last-child > div:nth-child(2) svg { transform: rotate(90deg); }
+    .shift-compare > div:last-child > div:last-child { border-radius: 0 0 12px 12px !important; border-left: 1px solid rgba(76,175,80,0.15) !important; border-top: none !important; }
+    /* Ch6 dashboard 2x2 grid → single column on mobile */
+    .home-mock > div:nth-child(3) { grid-template-columns: 1fr !important; }
+    .home-mock > div:nth-child(3) > div { border-right: none !important; }
+    /* Solar system skip button */
+    #solar-skip-btn { top: 12px; left: 12px; font-size: 0.6rem; padding: 4px 10px; }
+  }
+  /* Scroll-down indicators */
+  .scroll-hint{text-align:center;padding:28px 0 8px;animation:scrollBounce 2s ease-in-out infinite;}
+  .scroll-hint svg{width:26px;height:26px;opacity:0.45;}
+  .scroll-hint span{display:block;font-size:0.62rem;color:var(--text-secondary);opacity:0.45;letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;}
+  @keyframes scrollBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+  .scroll-hint.ch3-hint{display:none;}
+  .scroll-hint.ch3-hint.active{display:block;}
+</style>
+</head>
+<body>
+
+<!-- ===== PASSWORD GATE ===== -->
+<div id="password-gate">
+  <svg class="pw-lock-icon" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.2">
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+  </svg>
+  <div class="pw-title">Confidential</div>
+  <div class="pw-input-wrap">
+    <input type="password" id="pw-input" placeholder="Enter password" autocomplete="off" onkeydown="if(event.key==='Enter')checkPassword()"/>
+  </div>
+  <div class="pw-error" id="pw-error">Incorrect password</div>
+</div>
+
+<!-- ===== QUOTE PAGE ===== -->
+<div id="quote-page" style="display:none;" onclick="enterDeck()">
+  <div class="quote-text">
+    <blockquote>
+      "AI is a multiplier — the constant in an equation where human creativity is the variable.
+      A positive mind produces compounding value; a negative one produces compounding waste.
+      The technology is the same. The difference is who holds it."
+    </blockquote>
+    <div class="quote-attr">— Anonymous</div>
+  </div>
+  <div class="enter-cue">Enter <span class="arrow-bounce">→</span></div>
+</div>
+
+<!-- ===== SIDEBAR ===== -->
+<nav id="sidebar" class="hidden">
+  <div class="logo">Treasury Hub</div>
+  <a href="#ch1" data-ch="1">1 — The Ambition</a>
+  <a href="#ch2" data-ch="2">2 — Current State</a>
+  <a href="#ch3" data-ch="3">3 — The Vision</a>
+  <a href="#" data-ch="4" onclick="enterSolarSystem(); return false;">4 — The Modules ◉</a>
+  <a href="#ch5" data-ch="5" class="sidebar-locked">5 — Architecture</a>
+  <a href="#ch6" data-ch="6" class="sidebar-locked">6 — Home Page</a>
+  <a href="#ch7" data-ch="7" class="sidebar-locked">7 — Team Impact</a>
+  <a href="#ch8" data-ch="8" class="sidebar-locked">8 — Closing</a>
+</nav>
+
+<!-- ===== DECK CONTENT ===== -->
+<div id="deck-content">
+
+  <!-- CH1 -->
+  <section id="ch1" class="chapter-section" style="background: var(--bg-white);">
+    <div class="chapter-label">Chapter 1</div>
+    <h2 class="chapter-title">The Ambition</h2>
+
+    <div class="highlight-box">
+      <p>One Hub. Every Treasury workflow. Every data source. Every decision — supported by AI.</p>
+    </div>
+
+    <h3><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>Why Now</h3>
+    <p>Our tools — Kyriba, Excel, bank portals, email — solve fragments. None give us the whole picture.</p>
+    <p>AI is no longer a demo. Language understanding, document extraction, pattern recognition — they're production-ready for Treasury work.</p>
+    <p>Our team is lean. AI scales where headcount can't.</p>
+
+    <h3><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>What This Document Covers</h3>
+    <p>A vision — not a project plan. What we could build, what Treasury would look like, and how the team evolves. Implementation details come next, if the direction feels right.</p>
+  </section>
+
+  <!-- CH2 -->
+  <section id="ch2" class="chapter-section" style="background: var(--bg-section);">
+    <div class="chapter-label">Chapter 2</div>
+    <h2 class="chapter-title">The Honest Picture</h2>
+
+    <h3><span class="icon" style="color:var(--edwards-red)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>What Can Be Improved</h3>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div class="pain-body"><div class="pain-domain">Cash Forecast</div><p>Backward-looking. Accuracy never measured. Rules live in people's heads, not in any system.</p></div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>
+        <div class="pain-body"><div class="pain-domain">IC Loans</div><p>All in Excel. One-by-one Kyriba entry. Monthly reports by hand.</p></div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+        <div class="pain-body"><div class="pain-domain">Netting</div><p>Manual Kyriba transcription. Forecast blind to netting until after settlement.</p></div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div class="pain-body"><div class="pain-domain">Investment</div><p>80% in Kyriba. 20% manual. Compliance checked after execution.</p></div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+        <div class="pain-body"><div class="pain-domain">FX Hedging</div><p>Unfriendly Excel tracker. Settlement matching painful and error-prone.</p></div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <div class="pain-body"><div class="pain-domain">Bank Fees</div><p>Kyriba module abandoned — couldn't normalise fee taxonomies across banks.</p></div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div>
+        <div class="pain-body"><div class="pain-domain">Working Capital</div><p>No per-subsidiary WC tracking. Global cash distribution entirely ad-hoc.</p></div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="pain-body"><div class="pain-domain">BG / LC</div><p>Scattered across bank portals. No consolidated view. Renewal-miss risk.</p></div>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <p>"Treasury today is making forward-looking decisions with backward-looking information."</p>
+    </div>
+  </section>
+
+  <!-- CH3 -->
+  <section id="ch3" class="chapter-section" style="background: var(--bg-white);">
+    <div class="chapter-label">Chapter 3</div>
+    <h2 class="chapter-title">The Vision: Treasury as an Operating System</h2>
+
+    <p>The Treasury Hub is not a tool — it's an operating system. Every workflow runs on it, every data source connects to it, every decision gets made with full context.</p>
+
+    <div class="shift-compare" style="margin:32px 0;max-width:720px;">
+      <div style="text-align:center;margin-bottom:20px;">
+        <span style="font-size:0.68rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--edwards-red);">Why This Time Is Different</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:0;align-items:stretch;">
+        <!-- LEFT: Before -->
+        <div style="background:#fdf2f3;border-radius:12px 0 0 12px;padding:28px 24px;border:1px solid rgba(200,16,46,0.1);border-right:none;">
+          <div style="text-align:center;margin-bottom:16px;">
+            <svg viewBox="0 0 48 48" fill="none" style="width:48px;height:48px;">
+              <rect x="4" y="4" width="40" height="40" rx="8" stroke="#C8102E" stroke-width="1.5" stroke-dasharray="4 3" fill="rgba(200,16,46,0.04)"/>
+              <path d="M16 16h16M16 24h16M16 32h10" stroke="#C8102E" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+              <circle cx="36" cy="36" r="8" fill="#C8102E" opacity="0.15"/><line x1="32" y1="36" x2="40" y2="36" stroke="#C8102E" stroke-width="1.8"/></svg>
+          </div>
+          <div style="font-size:0.78rem;font-weight:700;color:#C8102E;text-align:center;margin-bottom:14px;">Third-Party Software</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.78rem;color:var(--text-secondary);">
+              <svg viewBox="0 0 16 16" fill="none" style="width:14px;height:14px;flex-shrink:0;"><circle cx="8" cy="8" r="7" stroke="#C8102E" stroke-width="1.2"/><line x1="5" y1="5" x2="11" y2="11" stroke="#C8102E" stroke-width="1.2"/><line x1="11" y1="5" x2="5" y2="11" stroke="#C8102E" stroke-width="1.2"/></svg>
+              Designed for the average user
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.78rem;color:var(--text-secondary);">
+              <svg viewBox="0 0 16 16" fill="none" style="width:14px;height:14px;flex-shrink:0;"><circle cx="8" cy="8" r="7" stroke="#C8102E" stroke-width="1.2"/><line x1="5" y1="5" x2="11" y2="11" stroke="#C8102E" stroke-width="1.2"/><line x1="11" y1="5" x2="5" y2="11" stroke="#C8102E" stroke-width="1.2"/></svg>
+              Customisation expensive & slow
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.78rem;color:var(--text-secondary);">
+              <svg viewBox="0 0 16 16" fill="none" style="width:14px;height:14px;flex-shrink:0;"><circle cx="8" cy="8" r="7" stroke="#C8102E" stroke-width="1.2"/><line x1="5" y1="5" x2="11" y2="11" stroke="#C8102E" stroke-width="1.2"/><line x1="11" y1="5" x2="5" y2="11" stroke="#C8102E" stroke-width="1.2"/></svg>
+              IT backlog blocks small fixes
+            </div>
+          </div>
+        </div>
+        <!-- CENTER: Arrow -->
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#fdf2f3,#edf7ee);z-index:1;">
+          <svg viewBox="0 0 24 48" fill="none" style="width:28px;height:56px;">
+            <path d="M6 4 L18 24 L6 44" stroke="var(--edwards-red)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 4 L18 24 L6 44" stroke="var(--edwards-red)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.3" stroke-dasharray="3 3"/>
+          </svg>
+        </div>
+        <!-- RIGHT: After -->
+        <div style="background:#edf7ee;border-radius:0 12px 12px 0;padding:28px 24px;border:1px solid rgba(76,175,80,0.15);border-left:none;">
+          <div style="text-align:center;margin-bottom:16px;">
+            <svg viewBox="0 0 48 48" fill="none" style="width:48px;height:48px;">
+              <rect x="4" y="4" width="40" height="40" rx="8" stroke="#4caf50" stroke-width="1.5" fill="rgba(76,175,80,0.04)"/>
+              <rect x="14" y="14" width="8" height="8" rx="2" fill="#4caf50" opacity="0.3"/><rect x="26" y="14" width="8" height="8" rx="2" fill="#4caf50" opacity="0.3"/>
+              <rect x="14" y="26" width="8" height="8" rx="2" fill="#4caf50" opacity="0.3"/><rect x="26" y="26" width="8" height="8" rx="2" fill="#4caf50" opacity="0.5"/>
+              <circle cx="36" cy="36" r="8" fill="#4caf50" opacity="0.15"/><polyline points="32,36 35,39 40,33" stroke="#4caf50" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div style="font-size:0.78rem;font-weight:700;color:#2e7d32;text-align:center;margin-bottom:14px;">AI-Powered Build</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.78rem;color:var(--text-secondary);">
+              <svg viewBox="0 0 16 16" fill="none" style="width:14px;height:14px;flex-shrink:0;"><circle cx="8" cy="8" r="7" stroke="#4caf50" stroke-width="1.2"/><polyline points="5,8 7,10.5 11,5.5" stroke="#4caf50" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>
+              Tailored to every team's needs
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.78rem;color:var(--text-secondary);">
+              <svg viewBox="0 0 16 16" fill="none" style="width:14px;height:14px;flex-shrink:0;"><circle cx="8" cy="8" r="7" stroke="#4caf50" stroke-width="1.2"/><polyline points="5,8 7,10.5 11,5.5" stroke="#4caf50" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>
+              Near-zero build cost
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.78rem;color:var(--text-secondary);">
+              <svg viewBox="0 0 16 16" fill="none" style="width:14px;height:14px;flex-shrink:0;"><circle cx="8" cy="8" r="7" stroke="#4caf50" stroke-width="1.2"/><polyline points="5,8 7,10.5 11,5.5" stroke="#4caf50" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>
+              No IT dependency
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vision-grid">
+      <div class="vision-card">
+        <h4><span class="v-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg></span>Backward → Forward</h4>
+        <p>From extrapolating yesterday to a live view of what's actually coming — fed by AR, AP, netting, and M&A data.</p>
+      </div>
+      <div class="vision-card">
+        <h4><span class="v-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></span>Reactive → Proactive</h4>
+        <p>Treasury sees shortfalls forming before anyone calls — and initiates.</p>
+      </div>
+      <div class="vision-card">
+        <h4><span class="v-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 118 2.83"/><path d="M22 12A10 10 0 0012 2v10z"/></svg></span>Living Forecast</h4>
+        <p>Not a monthly deliverable — a data object that updates itself every time an upstream event fires.</p>
+      </div>
+      <div class="vision-card">
+        <h4><span class="v-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>One Glance</h4>
+        <p>Search any subsidiary or bank. Get the full Treasury truth — directors, facilities, balances — instantly.</p>
+      </div>
+      <div class="vision-card" style="grid-column: span 2;">
+        <h4><span class="v-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>Treasury Measures Itself</h4>
+        <p>A home-page scorecard: H2H coverage, idle cash ratio, FX coverage, forecast accuracy. Willing to be quantified — and improving visibly.</p>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; max-width: 720px;">
+      <button class="enter-solar-btn" onclick="enterSolarSystem()">Explore the Hub →</button>
+      <p style="margin-top: 10px; font-size: 0.78rem; color: var(--text-secondary); opacity: 0.5;">Enter the interactive module explorer</p>
+    </div>
+  </section>
+
+  <!-- CH5 ARCHITECTURE -->
+  <section id="ch5" class="chapter-section chapter-locked" style="background: var(--bg-section);">
+    <div class="chapter-label">Chapter 5</div>
+    <h2 class="chapter-title">One Pattern, Many Domains</h2>
+    <p>Every module you just explored runs on the same architecture. The repetition is deliberate — the pattern <em>is</em> the argument.</p>
+
+    <div style="max-width:720px;margin:28px 0;">
+      <svg viewBox="0 0 720 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;font-family:'Merriweather Sans',sans-serif;">
+        <defs>
+          <linearGradient id="gRed" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#C8102E" stop-opacity="0.15"/><stop offset="100%" stop-color="#C8102E" stop-opacity="0.05"/></linearGradient>
+          <linearGradient id="gBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1e3a5f" stop-opacity="0.12"/><stop offset="100%" stop-color="#1e3a5f" stop-opacity="0.04"/></linearGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <marker id="arrowDown" viewBox="0 0 10 10" refX="5" refY="10" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L5,10 L10,0" fill="#C8102E" opacity="0.5"/></marker>
+        </defs>
+
+        <!-- LAYER 1: Treasury Hub UI -->
+        <rect x="180" y="12" width="360" height="64" rx="12" fill="url(#gRed)" stroke="#C8102E" stroke-width="1.5"/>
+        <svg x="200" y="28" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <text x="238" y="40" font-size="11" font-weight="600" fill="#C8102E" letter-spacing="1.5" text-transform="uppercase">TREASURY HUB UI</text>
+        <text x="238" y="58" font-size="10" fill="#505759">Search · Display · Workflow entry</text>
+
+        <!-- Arrow 1 -->
+        <line x1="360" y1="76" x2="360" y2="104" stroke="#C8102E" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowDown)"/>
+
+        <!-- LAYER 2: AI Layer -->
+        <rect x="180" y="108" width="360" height="64" rx="12" fill="url(#gRed)" stroke="#C8102E" stroke-width="1.5" filter="url(#glow)"/>
+        <svg x="200" y="124" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        <text x="238" y="136" font-size="11" font-weight="600" fill="#C8102E" letter-spacing="1.5">AI LAYER</text>
+        <text x="238" y="154" font-size="10" fill="#505759">Classify · Extract · Rules · Anomaly · Advise</text>
+
+        <!-- Arrow 2 -->
+        <line x1="360" y1="172" x2="360" y2="200" stroke="#C8102E" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrowDown)"/>
+
+        <!-- LAYER 3: Cloud Drive Adapter -->
+        <rect x="140" y="204" width="440" height="64" rx="12" fill="url(#gBlue)" stroke="#8aabc4" stroke-width="1"/>
+        <svg x="160" y="220" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="1.8"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+        <text x="198" y="236" font-size="11" font-weight="600" fill="#1e3a5f" letter-spacing="1.5">CLOUD DRIVE ADAPTER</text>
+        <text x="198" y="254" font-size="10" fill="#505759">Universal integration — file drops, no direct APIs needed</text>
+
+        <!-- Branch arrows from Cloud to Sources -->
+        <line x1="220" y1="268" x2="80" y2="310" stroke="#8aabc4" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="300" y1="268" x2="220" y2="310" stroke="#8aabc4" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="360" y1="268" x2="360" y2="310" stroke="#8aabc4" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="420" y1="268" x2="500" y2="310" stroke="#8aabc4" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="500" y1="268" x2="640" y2="310" stroke="#8aabc4" stroke-width="1" stroke-dasharray="3,3"/>
+
+        <!-- Source nodes -->
+        <rect x="30" y="310" width="100" height="52" rx="8" fill="#fff" stroke="#8aabc4" stroke-width="1"/>
+        <svg x="42" y="318" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="1.8"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <text x="64" y="332" font-size="9" font-weight="600" fill="#1e3a5f">Banks</text>
+        <text x="42" y="350" font-size="8" fill="#888">H2H · TWIST</text>
+
+        <rect x="170" y="310" width="100" height="52" rx="8" fill="#fff" stroke="#8aabc4" stroke-width="1"/>
+        <svg x="182" y="318" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        <text x="204" y="332" font-size="9" font-weight="600" fill="#1e3a5f">ERP</text>
+        <text x="182" y="350" font-size="8" fill="#888">AR/AP Aging</text>
+
+        <rect x="310" y="310" width="100" height="52" rx="8" fill="#fff" stroke="#8aabc4" stroke-width="1"/>
+        <svg x="322" y="318" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10"/></svg>
+        <text x="344" y="332" font-size="9" font-weight="600" fill="#1e3a5f">FXall</text>
+        <text x="322" y="350" font-size="8" fill="#888">Confirmations</text>
+
+        <rect x="450" y="310" width="100" height="52" rx="8" fill="#fff" stroke="#8aabc4" stroke-width="1"/>
+        <svg x="462" y="318" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <text x="484" y="332" font-size="9" font-weight="600" fill="#1e3a5f">Email / API</text>
+        <text x="462" y="350" font-size="7.5" fill="#888">M365 · REST · SFTP</text>
+
+        <rect x="590" y="310" width="100" height="52" rx="8" fill="#fff" stroke="#8aabc4" stroke-width="1"/>
+        <svg x="602" y="318" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1e3a5f" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <text x="624" y="332" font-size="9" font-weight="600" fill="#1e3a5f">Excel / DB</text>
+        <text x="602" y="350" font-size="7.5" fill="#888">Rule DB · SQL</text>
+
+        <!-- Arrows to Authority Systems -->
+        <line x1="360" y1="268" x2="360" y2="410" stroke="#C8102E" stroke-width="1" stroke-dasharray="4,3" opacity="0.3"/>
+
+        <!-- LAYER 4: Authority Systems -->
+        <rect x="140" y="410" width="440" height="64" rx="12" fill="#fff" stroke="#C8102E" stroke-width="1.5" stroke-dasharray="6,3"/>
+        <svg x="160" y="426" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <text x="198" y="438" font-size="11" font-weight="600" fill="#C8102E" letter-spacing="1.5">AUTHORITY SYSTEMS</text>
+        <text x="198" y="458" font-size="10" fill="#505759">Kyriba (payments) · CoreProcess (netting) · ERP (AR/AP)</text>
+        <text x="420" y="438" font-size="9" font-style="italic" fill="#888">unchanged</text>
+
+        <!-- Side label -->
+        <text x="10" y="152" font-size="8" fill="#C8102E" opacity="0.5" letter-spacing="2" transform="rotate(-90,10,152)">DATA FLOWS DOWN</text>
+        <text x="710" y="152" font-size="8" fill="#C8102E" opacity="0.5" letter-spacing="2" transform="rotate(90,710,152)">AI FILLS THE GAPS</text>
+
+        <!-- Decorative circuit lines -->
+        <circle cx="30" cy="44" r="2" fill="#C8102E" opacity="0.15"/>
+        <circle cx="690" cy="44" r="2" fill="#C8102E" opacity="0.15"/>
+        <circle cx="30" cy="140" r="2" fill="#C8102E" opacity="0.15"/>
+        <circle cx="690" cy="140" r="2" fill="#C8102E" opacity="0.15"/>
+        <line x1="30" y1="44" x2="30" y2="140" stroke="#C8102E" stroke-width="0.5" opacity="0.1"/>
+        <line x1="690" y1="44" x2="690" y2="140" stroke="#C8102E" stroke-width="0.5" opacity="0.1"/>
+      </svg>
+    </div>
+
+    <h3>Six Principles</h3>
+    <div class="principle-grid">
+      <div class="principle-card">
+        <div class="principle-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
+        <div><h4>Cloud as Universal Adapter</h4><p>File drops on shared storage. No IT dependency to start.</p></div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div><h4>Email or API — Your Choice</h4><p>Use M365 + Power Automate, REST APIs, or SFTP — pick whichever fits the vendor and use case.</p></div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+        <div><h4>Excel or Database — Your Choice</h4><p>Start with Excel for speed; graduate to SQL when scale demands it. AI wraps either one.</p></div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div><h4>System-of-Record Respect</h4><p>Kyriba, CoreProcess, ERP stay authorities. AI fills gaps.</p></div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div><h4>Human-in-the-Loop</h4><p>AI prepares, humans decide. Approval chains unchanged.</p></div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div><h4>Source-Side Standardisation</h4><p>Push upstream systems to output clean data.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH6 HOME PAGE -->
+  <section id="ch6" class="chapter-section chapter-locked" style="background: var(--bg-white);">
+    <div class="chapter-label">Chapter 6</div>
+    <h2 class="chapter-title">The Home Page: Treasury in One Screen</h2>
+    <p>Open the Hub each morning. See global Treasury at a glance. Drill in only on exceptions.</p>
+
+    <div class="home-mock" style="max-width:920px;">
+      <!-- Title bar -->
+      <div class="home-mock-bar" style="display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);color:#fff;padding:14px 24px;border-radius:12px 12px 0 0;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="2" style="width:20px;height:20px"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span style="font-weight:700;letter-spacing:0.5px;">Edwards Treasury Hub</span>
+          <span style="font-size:0.55rem;background:rgba(200,16,46,0.3);padding:2px 8px;border-radius:10px;color:#ff8a9e;margin-left:4px;">LIVE</span>
+        </div>
+        <div style="display:flex;gap:18px;font-size:0.68rem;opacity:0.7;">
+          <span style="opacity:1;border-bottom:1px solid #C8102E;padding-bottom:2px;">Dashboard</span><span>Modules</span><span>Reports</span><span>Settings</span>
+        </div>
+      </div>
+
+      <!-- KPI Strip — dark themed -->
+      <div style="display:flex;background:#0f1729;border-bottom:1px solid rgba(255,255,255,0.06);overflow-x:auto;">
+        <div style="flex:1;padding:18px 16px;text-align:center;border-right:1px solid rgba(255,255,255,0.04);">
+          <div style="font-size:1.4rem;font-weight:800;color:#00e5ff;font-family:'Merriweather Sans',sans-serif;">$284.7M</div>
+          <div style="font-size:0.58rem;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Global Cash Position</div>
+        </div>
+        <div style="flex:1;padding:18px 16px;text-align:center;border-right:1px solid rgba(255,255,255,0.04);">
+          <div style="font-size:1.4rem;font-weight:800;color:#4caf50;">92%</div>
+          <div style="font-size:0.58rem;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">H2H Coverage</div>
+        </div>
+        <div style="flex:1;padding:18px 16px;text-align:center;border-right:1px solid rgba(255,255,255,0.04);">
+          <div style="font-size:1.4rem;font-weight:800;color:#ff9800;">78%</div>
+          <div style="font-size:0.58rem;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Forecast Accuracy</div>
+        </div>
+        <div style="flex:1;padding:18px 16px;text-align:center;border-right:1px solid rgba(255,255,255,0.04);">
+          <div style="font-size:1.4rem;font-weight:800;color:#7c4dff;">87%</div>
+          <div style="font-size:0.58rem;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">FX Hedge Ratio</div>
+        </div>
+        <div style="flex:1;padding:18px 16px;text-align:center;">
+          <div style="font-size:1.4rem;font-weight:800;color:#C8102E;">3</div>
+          <div style="font-size:0.58rem;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Active Alerts</div>
+        </div>
+      </div>
+
+      <!-- Main content: 2x2 chart grid -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;background:#0b1120;">
+
+        <!-- CHART 1: Cash Forecast Curve -->
+        <div style="padding:20px 24px;border-right:1px solid rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.04);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <div style="font-size:0.68rem;font-weight:700;color:rgba(255,255,255,0.85);letter-spacing:0.08em;text-transform:uppercase;">12-Week Cash Forecast</div>
+            <div style="font-size:0.55rem;color:rgba(255,255,255,0.35);background:rgba(255,255,255,0.06);padding:2px 8px;border-radius:8px;">USD Millions</div>
+          </div>
+          <svg viewBox="0 0 380 180" style="width:100%;height:auto;">
+            <defs>
+              <linearGradient id="cashGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#00e5ff" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="forecastGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#7c4dff" stop-opacity="0.15"/>
+                <stop offset="100%" stop-color="#7c4dff" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <!-- Grid lines -->
+            <line x1="40" y1="20" x2="370" y2="20" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+            <line x1="40" y1="55" x2="370" y2="55" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+            <line x1="40" y1="90" x2="370" y2="90" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+            <line x1="40" y1="125" x2="370" y2="125" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+            <!-- Y-axis labels -->
+            <text x="36" y="24" text-anchor="end" font-size="7" fill="rgba(255,255,255,0.3)">320</text>
+            <text x="36" y="59" text-anchor="end" font-size="7" fill="rgba(255,255,255,0.3)">290</text>
+            <text x="36" y="94" text-anchor="end" font-size="7" fill="rgba(255,255,255,0.3)">260</text>
+            <text x="36" y="129" text-anchor="end" font-size="7" fill="rgba(255,255,255,0.3)">230</text>
+            <!-- Actual line (filled area) -->
+            <path d="M50,82 L77,75 L104,88 L131,65 L158,58 L185,70 L185,145 L50,145 Z" fill="url(#cashGrad)"/>
+            <polyline points="50,82 77,75 104,88 131,65 158,58 185,70" fill="none" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Forecast line (dashed, with confidence band) -->
+            <path d="M185,70 L212,62 L239,48 L266,55 L293,40 L320,35 L347,30 L347,95 L320,85 L293,90 L266,100 L239,95 L212,105 L185,70 Z" fill="url(#forecastGrad)" opacity="0.5"/>
+            <polyline points="185,70 212,82 239,70 266,76 293,62 320,58 347,52" fill="none" stroke="#7c4dff" stroke-width="2" stroke-dasharray="6,4" stroke-linecap="round"/>
+            <!-- Data points on actual -->
+            <circle cx="50" cy="82" r="3" fill="#0b1120" stroke="#00e5ff" stroke-width="1.5"/>
+            <circle cx="77" cy="75" r="3" fill="#0b1120" stroke="#00e5ff" stroke-width="1.5"/>
+            <circle cx="104" cy="88" r="3" fill="#0b1120" stroke="#00e5ff" stroke-width="1.5"/>
+            <circle cx="131" cy="65" r="3" fill="#0b1120" stroke="#00e5ff" stroke-width="1.5"/>
+            <circle cx="158" cy="58" r="3" fill="#0b1120" stroke="#00e5ff" stroke-width="1.5"/>
+            <circle cx="185" cy="70" r="2.5" fill="#00e5ff"/>
+            <!-- X-axis labels -->
+            <text x="50" y="162" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.3)">W1</text>
+            <text x="104" y="162" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.3)">W3</text>
+            <text x="158" y="162" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.3)">W5</text>
+            <text x="185" y="162" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.45)">Today</text>
+            <text x="239" y="162" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.3)">W8</text>
+            <text x="293" y="162" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.3)">W10</text>
+            <text x="347" y="162" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.3)">W12</text>
+            <!-- Today marker -->
+            <line x1="185" y1="20" x2="185" y2="150" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="3,3"/>
+            <!-- Legend -->
+            <line x1="50" y1="175" x2="65" y2="175" stroke="#00e5ff" stroke-width="2"/><text x="68" y="178" font-size="6.5" fill="rgba(255,255,255,0.5)">Actual</text>
+            <line x1="110" y1="175" x2="125" y2="175" stroke="#7c4dff" stroke-width="2" stroke-dasharray="4,3"/><text x="128" y="178" font-size="6.5" fill="rgba(255,255,255,0.5)">AI Forecast</text>
+            <rect x="195" y="172" width="10" height="6" rx="1" fill="#7c4dff" opacity="0.2"/><text x="208" y="178" font-size="6.5" fill="rgba(255,255,255,0.5)">Confidence Band</text>
+          </svg>
+        </div>
+
+        <!-- CHART 2: Regional Cash Bar Chart -->
+        <div style="padding:20px 24px;border-bottom:1px solid rgba(255,255,255,0.04);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <div style="font-size:0.68rem;font-weight:700;color:rgba(255,255,255,0.85);letter-spacing:0.08em;text-transform:uppercase;">Cash by Region</div>
+            <div style="font-size:0.55rem;color:rgba(255,255,255,0.35);background:rgba(255,255,255,0.06);padding:2px 8px;border-radius:8px;">End of Day</div>
+          </div>
+          <svg viewBox="0 0 380 180" style="width:100%;height:auto;">
+            <!-- Grid -->
+            <line x1="70" y1="15" x2="370" y2="15" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+            <line x1="70" y1="50" x2="370" y2="50" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+            <line x1="70" y1="85" x2="370" y2="85" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+            <line x1="70" y1="120" x2="370" y2="120" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+            <!-- X-axis values -->
+            <text x="70" y="155" text-anchor="middle" font-size="6" fill="rgba(255,255,255,0.3)">$0</text>
+            <text x="145" y="155" text-anchor="middle" font-size="6" fill="rgba(255,255,255,0.3)">$25M</text>
+            <text x="220" y="155" text-anchor="middle" font-size="6" fill="rgba(255,255,255,0.3)">$50M</text>
+            <text x="295" y="155" text-anchor="middle" font-size="6" fill="rgba(255,255,255,0.3)">$75M</text>
+            <text x="370" y="155" text-anchor="middle" font-size="6" fill="rgba(255,255,255,0.3)">$100M</text>
+            <!-- Bars — horizontal -->
+            <!-- APAC -->
+            <text x="65" y="30" text-anchor="end" font-size="8" fill="rgba(255,255,255,0.6)" font-weight="600">APAC</text>
+            <rect x="70" y="20" width="270" height="18" rx="3" fill="url(#barGrad1)" opacity="0.9"/>
+            <text x="345" y="33" font-size="8" font-weight="700" fill="#00e5ff">$89.2M</text>
+            <!-- Americas -->
+            <text x="65" y="65" text-anchor="end" font-size="8" fill="rgba(255,255,255,0.6)" font-weight="600">Americas</text>
+            <rect x="70" y="55" width="225" height="18" rx="3" fill="url(#barGrad2)" opacity="0.9"/>
+            <text x="300" y="68" font-size="8" font-weight="700" fill="#4caf50">$74.5M</text>
+            <!-- EMEA -->
+            <text x="65" y="100" text-anchor="end" font-size="8" fill="rgba(255,255,255,0.6)" font-weight="600">EMEA</text>
+            <rect x="70" y="90" width="195" height="18" rx="3" fill="url(#barGrad3)" opacity="0.9"/>
+            <text x="270" y="103" font-size="8" font-weight="700" fill="#ff9800">$64.8M</text>
+            <!-- Japan -->
+            <text x="65" y="135" text-anchor="end" font-size="8" fill="rgba(255,255,255,0.6)" font-weight="600">Japan</text>
+            <rect x="70" y="125" width="170" height="18" rx="3" fill="url(#barGrad4)" opacity="0.9"/>
+            <text x="245" y="138" font-size="8" font-weight="700" fill="#7c4dff">$56.2M</text>
+            <defs>
+              <linearGradient id="barGrad1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00e5ff" stop-opacity="0.7"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient>
+              <linearGradient id="barGrad2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#4caf50" stop-opacity="0.7"/><stop offset="100%" stop-color="#4caf50"/></linearGradient>
+              <linearGradient id="barGrad3" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ff9800" stop-opacity="0.7"/><stop offset="100%" stop-color="#ff9800"/></linearGradient>
+              <linearGradient id="barGrad4" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7c4dff" stop-opacity="0.7"/><stop offset="100%" stop-color="#7c4dff"/></linearGradient>
+            </defs>
+            <!-- Legend: idle cash markers -->
+            <rect x="70" y="165" width="8" height="8" rx="2" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+            <text x="82" y="173" font-size="6.5" fill="rgba(255,255,255,0.4)">Idle cash flagged by AI shown in lighter shade</text>
+          </svg>
+        </div>
+
+        <!-- CHART 3: Credit Card Limit Alert Gauges -->
+        <div style="padding:20px 24px;border-right:1px solid rgba(255,255,255,0.04);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <div style="font-size:0.68rem;font-weight:700;color:rgba(255,255,255,0.85);letter-spacing:0.08em;text-transform:uppercase;">Credit Facility Utilisation</div>
+            <div style="font-size:0.55rem;color:#C8102E;background:rgba(200,16,46,0.15);padding:2px 8px;border-radius:8px;">1 Alert</div>
+          </div>
+          <svg viewBox="0 0 380 170" style="width:100%;height:auto;">
+            <!-- Gauge 1: Citi RCF -->
+            <g transform="translate(60,85)">
+              <path d="M-45,0 A45,45 0 1,1 45,0" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8" stroke-linecap="round"/>
+              <path d="M-45,0 A45,45 0 1,1 27,36" fill="none" stroke="#4caf50" stroke-width="8" stroke-linecap="round"/>
+              <text x="0" y="-8" text-anchor="middle" font-size="16" font-weight="800" fill="#4caf50">68%</text>
+              <text x="0" y="8" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.45)">$34M / $50M</text>
+              <text x="0" y="52" text-anchor="middle" font-size="8" font-weight="600" fill="rgba(255,255,255,0.7)">Citi RCF</text>
+            </g>
+            <!-- Gauge 2: HSBC OD -->
+            <g transform="translate(190,85)">
+              <path d="M-45,0 A45,45 0 1,1 45,0" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8" stroke-linecap="round"/>
+              <path d="M-45,0 A45,45 0 1,1 43,10" fill="none" stroke="#C8102E" stroke-width="8" stroke-linecap="round"/>
+              <text x="0" y="-8" text-anchor="middle" font-size="16" font-weight="800" fill="#C8102E">91%</text>
+              <text x="0" y="8" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.45)">$18.2M / $20M</text>
+              <text x="0" y="52" text-anchor="middle" font-size="8" font-weight="600" fill="rgba(255,255,255,0.7)">HSBC OD</text>
+              <!-- Alert pulse -->
+              <circle cx="36" cy="-30" r="5" fill="#C8102E" opacity="0.8"/>
+              <circle cx="36" cy="-30" r="3" fill="#fff"/>
+              <text x="36" y="-27" text-anchor="middle" font-size="5" font-weight="800" fill="#C8102E">!</text>
+            </g>
+            <!-- Gauge 3: MUFG TL -->
+            <g transform="translate(320,85)">
+              <path d="M-45,0 A45,45 0 1,1 45,0" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8" stroke-linecap="round"/>
+              <path d="M-45,0 A45,45 0 1,1 -9,44" fill="none" stroke="#ff9800" stroke-width="8" stroke-linecap="round"/>
+              <text x="0" y="-8" text-anchor="middle" font-size="16" font-weight="800" fill="#ff9800">45%</text>
+              <text x="0" y="8" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.45)">$13.5M / $30M</text>
+              <text x="0" y="52" text-anchor="middle" font-size="8" font-weight="600" fill="rgba(255,255,255,0.7)">MUFG TL</text>
+            </g>
+            <!-- Threshold line label -->
+            <text x="190" y="165" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.3)">Alert threshold: 85% utilisation</text>
+          </svg>
+        </div>
+
+        <!-- CHART 4: IC Loan Approval Pipeline -->
+        <div style="padding:20px 24px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <div style="font-size:0.68rem;font-weight:700;color:rgba(255,255,255,0.85);letter-spacing:0.08em;text-transform:uppercase;">IC Loan Pipeline</div>
+            <div style="font-size:0.55rem;color:#ff9800;background:rgba(255,152,0,0.15);padding:2px 8px;border-radius:8px;">2 Pending</div>
+          </div>
+          <svg viewBox="0 0 380 170" style="width:100%;height:auto;">
+            <!-- Pipeline stages -->
+            <defs>
+              <linearGradient id="pipeGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#1a1a2e"/>
+                <stop offset="100%" stop-color="#16213e"/>
+              </linearGradient>
+            </defs>
+            <!-- Stage labels -->
+            <text x="50" y="15" text-anchor="middle" font-size="7" font-weight="600" fill="rgba(255,255,255,0.5)">Requested</text>
+            <text x="145" y="15" text-anchor="middle" font-size="7" font-weight="600" fill="rgba(255,255,255,0.5)">AI Review</text>
+            <text x="240" y="15" text-anchor="middle" font-size="7" font-weight="600" fill="rgba(255,255,255,0.5)">Approval</text>
+            <text x="335" y="15" text-anchor="middle" font-size="7" font-weight="600" fill="rgba(255,255,255,0.5)">Booked</text>
+            <!-- Stage connectors -->
+            <line x1="85" y1="12" x2="110" y2="12" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <line x1="180" y1="12" x2="205" y2="12" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <line x1="275" y1="12" x2="300" y2="12" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <!-- Loan cards -->
+            <!-- Loan 1 — In Approval -->
+            <rect x="200" y="28" width="80" height="40" rx="6" fill="rgba(255,152,0,0.12)" stroke="#ff9800" stroke-width="1"/>
+            <text x="240" y="43" text-anchor="middle" font-size="7.5" font-weight="700" fill="#ff9800">$5.2M</text>
+            <text x="240" y="55" text-anchor="middle" font-size="6" fill="rgba(255,255,255,0.4)">SG → JP · 90d</text>
+            <text x="240" y="63" text-anchor="middle" font-size="5" fill="#ff9800">Pending SVP sign-off</text>
+            <!-- Loan 2 — AI Review -->
+            <rect x="105" y="75" width="80" height="40" rx="6" fill="rgba(124,77,255,0.12)" stroke="#7c4dff" stroke-width="1"/>
+            <text x="145" y="90" text-anchor="middle" font-size="7.5" font-weight="700" fill="#7c4dff">$12.0M</text>
+            <text x="145" y="102" text-anchor="middle" font-size="6" fill="rgba(255,255,255,0.4)">US → DE · 180d</text>
+            <text x="145" y="110" text-anchor="middle" font-size="5" fill="#7c4dff">AI: rate check OK</text>
+            <!-- Loan 3 — Booked (completed) -->
+            <rect x="295" y="75" width="80" height="40" rx="6" fill="rgba(76,175,80,0.12)" stroke="#4caf50" stroke-width="1"/>
+            <text x="335" y="90" text-anchor="middle" font-size="7.5" font-weight="700" fill="#4caf50">$8.5M</text>
+            <text x="335" y="102" text-anchor="middle" font-size="6" fill="rgba(255,255,255,0.4)">CN → SG · 60d</text>
+            <text x="335" y="110" text-anchor="middle" font-size="5" fill="#4caf50">Booked in Kyriba</text>
+            <!-- Loan 4 — Requested -->
+            <rect x="10" y="122" width="80" height="40" rx="6" fill="rgba(0,229,255,0.08)" stroke="rgba(0,229,255,0.4)" stroke-width="1"/>
+            <text x="50" y="137" text-anchor="middle" font-size="7.5" font-weight="700" fill="#00e5ff">$3.8M</text>
+            <text x="50" y="149" text-anchor="middle" font-size="6" fill="rgba(255,255,255,0.4)">AU → IN · 120d</text>
+            <text x="50" y="157" text-anchor="middle" font-size="5" fill="rgba(0,229,255,0.6)">Awaiting data</text>
+            <!-- Flow arrows -->
+            <path d="M90,142 Q98,142 105,115" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1" marker-end="url(#arrowW)"/>
+            <path d="M185,95 Q193,95 200,48" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1" marker-end="url(#arrowW)"/>
+            <path d="M280,48 Q288,48 295,95" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1" marker-end="url(#arrowW)"/>
+            <defs><marker id="arrowW" markerWidth="6" markerHeight="4" refX="6" refY="2" orient="auto"><path d="M0,0 L6,2 L0,4" fill="rgba(255,255,255,0.2)"/></marker></defs>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Live Alerts Bar -->
+      <div style="background:#0d1525;padding:14px 24px;border-top:1px solid rgba(255,255,255,0.04);">
+        <div style="display:flex;align-items:center;gap:12px;overflow-x:auto;">
+          <div style="font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.12em;white-space:nowrap;">Live Alerts</div>
+          <div style="display:flex;gap:10px;font-size:0.7rem;">
+            <span style="display:flex;align-items:center;gap:5px;white-space:nowrap;"><span style="width:6px;height:6px;border-radius:50%;background:#C8102E;flex-shrink:0;"></span><span style="color:rgba(255,255,255,0.6);">HSBC OD at 91% — breach imminent</span></span>
+            <span style="display:flex;align-items:center;gap:5px;white-space:nowrap;"><span style="width:6px;height:6px;border-radius:50%;background:#ff9800;flex-shrink:0;"></span><span style="color:rgba(255,255,255,0.6);">SG FX hedge expires in 5 days</span></span>
+            <span style="display:flex;align-items:center;gap:5px;white-space:nowrap;"><span style="width:6px;height:6px;border-radius:50%;background:#ff9800;flex-shrink:0;"></span><span style="color:rgba(255,255,255,0.6);">JP bank fee anomaly +18%</span></span>
+            <span style="display:flex;align-items:center;gap:5px;white-space:nowrap;"><span style="width:6px;height:6px;border-radius:50%;background:#4caf50;flex-shrink:0;"></span><span style="color:rgba(255,255,255,0.6);">Netting N-2404 settled</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom status bar -->
+      <div style="padding:10px 24px;background:#0a0f1d;border-radius:0 0 12px 12px;font-size:0.58rem;color:rgba(255,255,255,0.25);display:flex;justify-content:space-between;">
+        <span>Last refreshed: 08:02 SGT · Auto-refresh: 15 min</span>
+        <span>Sources: Kyriba · ERP · H2H · CoreProcess · FXall</span>
+      </div>
+    </div>
+    <p style="margin-top:16px;font-size:0.82rem;color:var(--text-secondary);font-style:italic;opacity:0.7;">* Mockup — actual UI will evolve through iteration.</p>
+  </section>
+
+  <!-- CH7 TEAM IMPACT -->
+  <section id="ch7" class="chapter-section chapter-locked" style="background: var(--bg-section);">
+    <div class="chapter-label">Chapter 7</div>
+    <h2 class="chapter-title">Team Impact</h2>
+
+    <div class="highlight-box">
+      <p>"AI doesn't replace the team — it changes what the team does."</p>
+    </div>
+
+    <table class="impact-table">
+      <thead><tr><th>Domain</th><th>Today</th><th>With the Hub</th></tr></thead>
+      <tbody>
+        <tr><td>Cash Forecasting</td><td>Chase data, manual rules, extrapolate</td><td>Maintain rules, review exceptions</td></tr>
+        <tr><td>IC Loans</td><td>Excel entry, Kyriba one-by-one</td><td>Approve requests, review AI flags</td></tr>
+        <tr><td>Netting</td><td>Manual Kyriba transcription</td><td>Automated — exceptions only</td></tr>
+        <tr><td>FX Settlement</td><td>Manual hedge-to-payment matching</td><td>Exception review only</td></tr>
+        <tr><td>Bank Fees</td><td>Not done</td><td>AI insights → bank negotiations</td></tr>
+        <tr><td>WC Monitoring</td><td>Doesn't exist</td><td>Override AI baselines as needed</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top: 36px;">Emergent Roles</h3>
+    <p style="margin-bottom: 18px; font-size: 0.88rem; color: var(--text-secondary);">Not new headcount — reshaped work for the existing team.</p>
+
+    <div class="role-card" style="border-left:3px solid var(--edwards-red);background:rgba(200,16,46,0.03);">
+      <div class="role-icon" style="color:var(--edwards-red);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg></div>
+      <div><h4>AI Process Architect <span style="font-size:0.72rem;font-weight:400;color:var(--edwards-red);margin-left:6px;">← This is what I'm building now</span></h4><p>Designs and maintains AI workflows — prompt logic, rule databases, integration patterns. The bridge between Treasury domain knowledge and AI capability.</p></div>
+    </div>
+    <div class="role-card">
+      <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+      <div><h4>Rules Steward</h4><p>Owns Forecast Rule DB, reviews AI-suggested rule updates.</p></div>
+    </div>
+    <div class="role-card">
+      <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg></div>
+      <div><h4>Exception Analyst</h4><p>Triages AI-flagged anomalies across all domains.</p></div>
+    </div>
+    <div class="role-card">
+      <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div><h4>Policy Monitor</h4><p>Interprets compliance alerts, coordinates with stakeholders.</p></div>
+    </div>
+    <div class="role-card">
+      <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg></div>
+      <div><h4>Strategic Advisor</h4><p>Bank negotiations, cash strategy, proactive funding — work Treasury never had time for.</p></div>
+    </div>
+
+    <div class="highlight-box" style="margin-top: 32px;">
+      <p>"The question isn't whether Treasury needs fewer people. It's what we want more Treasury talent to be doing."</p>
+    </div>
+  </section>
+
+  <!-- CH8 CLOSING — LETTER -->
+  <section id="ch8" class="closing-page chapter-locked">
+    <div class="letter-card">
+      <div class="letter-body">
+        Thank you for taking the time to explore this vision. It shows what Treasury could look like when AI is woven into every workflow we run.
+        <br><br>
+        Some of the programs described here have already been validated and tested by me firsthand. This is not just a presentation — it is a realistic, achievable blueprint built on today's AI coding capabilities, and it can be delivered without heavy IT involvement.
+        <br><br>
+        If this direction resonates with you, I'd love to continue the conversation and map out how we get there together.
+      </div>
+      <div class="letter-closing-quote">
+        "The multiplier is ready. The base is here.<br>Let's see what we can compound."
+      </div>
+      <div class="letter-sig">
+        <div class="sig-name">Roy Zhu</div>
+        <p class="sig-detail">Concept & Design: Roy Zhu × Claude AI</p>
+        <p class="sig-detail">April 2026</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ===== SOLAR SYSTEM ===== -->
+<div id="solar-system-container">
+  <canvas id="solar-canvas"></canvas>
+  <button id="solar-skip-btn" onclick="exitSolarSystem()" style="position:absolute;top:20px;left:24px;z-index:20;background:none;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.25);font-family:'Merriweather Sans',sans-serif;font-size:0.68rem;padding:5px 14px;border-radius:16px;cursor:pointer;letter-spacing:0.06em;transition:all 0.3s;" onmouseover="this.style.color='rgba(255,255,255,0.6)';this.style.borderColor='rgba(255,255,255,0.3)';" onmouseout="this.style.color='rgba(255,255,255,0.25)';this.style.borderColor='rgba(255,255,255,0.1)';">Skip →</button>
+  <div id="solar-bottom-hints">
+    <div id="solar-hint">Click on a planet to explore</div>
+    <div id="planet-progress">0 / 10 explored · explore all to continue</div>
+    <div id="sun-hint">All planets explored — now, click the Sun</div>
+  </div>
+
+  <div id="planet-panel">
+    <button class="panel-back-btn" onclick="closePlanetPanel()">← Back to Solar System</button>
+    <div id="panel-content"></div>
+  </div>
+
+  <div id="sun-panel">
+    <button class="panel-back-btn" onclick="closeSunPanel()">← Back to Solar System</button>
+    <div id="sun-content" style="margin-top: 40px;">
+      <div class="sun-hero">
+        <div class="sun-hero-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></div>
+        <div class="panel-domain">The Centre</div>
+        <div class="panel-title" style="margin-bottom:8px;">Treasury Hub</div>
+        <div class="panel-text" style="text-align:center;max-width:380px;margin:0 auto;">The connective centre. Every module orbits it. Every data stream flows through it.</div>
+      </div>
+
+      <div class="sun-card-grid">
+        <div class="sun-card">
+          <div class="sun-card-icon" style="background:rgba(100,181,246,0.12);"><svg viewBox="0 0 24 24" fill="none" stroke="#64b5f6" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+          <h4>One Glance UI</h4>
+          <p>Search any entity or bank. Directors, facilities, signatories — instantly.</p>
+        </div>
+        <div class="sun-card">
+          <div class="sun-card-icon" style="background:rgba(255,183,77,0.12);"><svg viewBox="0 0 24 24" fill="none" stroke="#ffb74d" stroke-width="1.8"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+          <h4>KPI Dashboard</h4>
+          <p>H2H coverage, idle cash, FX coverage, forecast accuracy — auto-aggregated daily.</p>
+        </div>
+        <div class="sun-card">
+          <div class="sun-card-icon" style="background:rgba(129,199,132,0.12);"><svg viewBox="0 0 24 24" fill="none" stroke="#81c784" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+          <h4>Module Portals</h4>
+          <p>Every planet you just explored — same design, same data layer, same AI backbone.</p>
+        </div>
+        <div class="sun-card">
+          <div class="sun-card-icon" style="background:rgba(206,147,216,0.12);"><svg viewBox="0 0 24 24" fill="none" stroke="#ce93d8" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div>
+          <h4>Alert Feed</h4>
+          <p>Concentration breaches, WC outliers, fee anomalies — surfaced before they escalate.</p>
+        </div>
+      </div>
+
+      <div class="panel-section-label" style="margin-top:28px;">Connected Modules</div>
+      <div class="sun-module-list">
+        <span class="sun-module-tag">IC Loans</span>
+        <span class="sun-module-tag">Investment</span>
+        <span class="sun-module-tag">Cash Forecast</span>
+        <span class="sun-module-tag">Working Capital</span>
+        <span class="sun-module-tag">FX Hedging</span>
+        <span class="sun-module-tag">Netting</span>
+        <span class="sun-module-tag">Trade Finance</span>
+        <span class="sun-module-tag">Credit Cards</span>
+        <span class="sun-module-tag">Bank Fees</span>
+        <span class="sun-module-tag">M&A Planning</span>
+      </div>
+    </div>
+  </div>
+
+  <button id="continue-btn" onclick="exitSolarSystem()">Continue to Architecture →</button>
+</div>
+
+<div class="confidential-footer">Confidential</div>
+
+<!-- ===== THREE.JS ===== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+let scene, camera, renderer, raycaster, mouse;
+let sun, sunGlowInner, sunGlowOuter, sunCorona, planets = [], asteroidBelt, asteroidGlowMesh;
+let planetMeshes = [], planetGlows = [];
+let readPlanets = new Set();
+let sunRead = false, sunUnlocked = false, solarSystemActive = false;
+let panelOpen = false, isAnimating = false, currentPanelType = null, currentPanelIndex = -1;
+let originalCameraPos, labelDiv;
+let connectionLines = [], electricParticles = [];
+
+const PLANET_DATA = [
+  { name:'Mercury', module:'IC Loans', color:0xb5a893, size:0.35, orbit:6, speed:0.013, startAngle:0,
+    glowColor:'#b5a893',
+    domain:'Intercompany Loans',
+    today:'All in Excel. One-by-one Kyriba entry. Monthly reports by hand.',
+    flow:['Excel Request','AI Evaluate','Treasury Approve','Kyriba Auto-Book','Auto-Report'],
+    flowIcons:['edit','cpu','check','database','file-text'],
+    teamImpact:'From data entry → portfolio judgment.',
+    ladder:'Advise', ladderClass:'ladder-advise' },
+  { name:'Venus', module:'Investment', color:0xe8c87a, size:0.48, orbit:7.5, speed:0.010, startAngle:1.2,
+    glowColor:'#e8c87a',
+    domain:'Investment Management',
+    today:'80% in Kyriba. 20% manual. Compliance checked after execution.',
+    flow:['Voice Intent','AI Echo-Back','3-Layer Policy','1-over-1 Approval','Auto-Execute'],
+    flowIcons:['mic','cpu','shield','users','zap'],
+    teamImpact:'Decisions stay human. AI handles compliance + reporting.',
+    ladder:'Advise', ladderClass:'ladder-advise' },
+  { name:'Earth', module:'Cash Forecasting', color:0x4da6ff, size:0.52, orbit:9, speed:0.008, startAngle:2.8,
+    glowColor:'#4da6ff',
+    domain:'Cash Forecasting',
+    today:'Backward-looking. Accuracy never measured. Rules in people\'s heads.',
+    flow:['Kyriba Position','Excel / DB Rules','Cloud Drive','AI Applies Rules','Hub Display'],
+    flowIcons:['database','grid','cloud','cpu','monitor'],
+    teamImpact:'From chasing data → maintaining rules, reviewing exceptions.',
+    ladder:'Advise', ladderClass:'ladder-advise' },
+  { name:'Mars', module:'Working Capital', color:0xc1440e, size:0.42, orbit:10.5, speed:0.006, startAngle:4.1,
+    glowColor:'#c1440e',
+    domain:'Working Capital Health',
+    today:'No per-subsidiary tracking. Global cash distribution ad-hoc.',
+    flow:['AR/AP Data','AI Baseline','Anomaly Detection','WC Heatmap','Alerts'],
+    flowIcons:['database','cpu','alert-triangle','globe','bell'],
+    teamImpact:'Entirely new capability. Proactive, data-driven funding.',
+    ladder:'Alert', ladderClass:'ladder-alert' },
+  { name:'Jupiter', module:'FX Hedging', color:0xd4a574, size:0.85, orbit:14, speed:0.004, startAngle:0.7,
+    glowColor:'#d4a574',
+    domain:'FX Hedging',
+    today:'Unfriendly Excel tracker. Settlement matching painful.',
+    flow:['FXall Confirm','Email/Cloud/API','AI Extract','Auto-Match','Reports'],
+    flowIcons:['globe','cloud','cpu','link','bar-chart'],
+    teamImpact:'From data management → hedge strategy.',
+    ladder:'Observe', ladderClass:'ladder-observe' },
+  { name:'Saturn', module:'Netting', color:0xead6a6, size:0.72, orbit:16, speed:0.003, startAngle:3.5,
+    glowColor:'#ead6a6',
+    domain:'Netting',
+    today:'Manual Kyriba transcription. Forecast blind until settlement.',
+    flow:['CoreProcess Report','File Drop','AI Parse & Map','AI Book to Kyriba','Forecast Updated'],
+    flowIcons:['file','cloud','cpu','refresh-cw','check-circle'],
+    teamImpact:'Month-end transcription eliminated.',
+    ladder:'Execute', ladderClass:'ladder-execute' },
+  { name:'Uranus', module:'Trade Finance', color:0x7ec8d9, size:0.55, orbit:18, speed:0.0022, startAngle:5.2,
+    glowColor:'#7ec8d9',
+    domain:'Trade Finance — BG/LC',
+    today:'100-200/yr scattered across portals. No consolidated view.',
+    flow:['Bank Email','Cloud Ingest','AI Extract','Facility Dashboard','Renewal Alerts'],
+    flowIcons:['mail','cloud','cpu','layout','bell'],
+    teamImpact:'Renewal risk → system-managed alerts.',
+    ladder:'Alert', ladderClass:'ladder-alert' },
+  { name:'Neptune', module:'Credit Cards', color:0x3f51b5, size:0.52, orbit:20, speed:0.0017, startAngle:1.9,
+    glowColor:'#5c6bc0',
+    domain:'Credit Card & Facilities',
+    today:'No cross-departmental visibility. Limit requests too late.',
+    flow:['Facility Data','ERP Expenses','AI Trend Analysis','Threshold Alerts','Proactive Advisory'],
+    flowIcons:['credit-card','database','trending-up','alert-triangle','message-circle'],
+    teamImpact:'Treasury proactively advises business units.',
+    ladder:'Advise', ladderClass:'ladder-advise' },
+  { name:'Pluto', module:'M&A Planning', color:0x9e9e9e, size:0.3, orbit:22, speed:0.0012, startAngle:4.6,
+    glowColor:'#b0bec5',
+    domain:'M&A Long-Range Planning',
+    today:'Ad-hoc Excel. No long-range forecast integration.',
+    flow:['Deal Docs Upload','AI Extraction','Cash Amounts + Dates','Forecast Integration'],
+    flowIcons:['upload','cpu','dollar-sign','trending-up'],
+    teamImpact:'Strategic planning visibility. Phase 3.',
+    ladder:'Observe', ladderClass:'ladder-observe' }
+];
+
+const ASTEROID_DATA = {
+  name:'Asteroid Belt', module:'Bank Fees', color:0xffab91,
+  glowColor:'#ffab91',
+  domain:'Bank Fee Analysis',
+  today:'Kyriba module abandoned. TWIST statements unanalysed.',
+  flow:['TWIST via H2H','Cloud Drive','AI Normalise','Anomaly Detect','Negotiation Insights'],
+  flowIcons:['file','cloud','cpu','search','dollar-sign'],
+  teamImpact:'Real dollars saved. 5-10% fee reduction.',
+  ladder:'Advise', ladderClass:'ladder-advise'
+};
+
+function checkPassword(){
+  const input=document.getElementById('pw-input');
+  const val=input.value.toLowerCase().trim();
+  // Simple hash check to avoid plaintext in source
+  if(val==='edwards'){
+    document.getElementById('password-gate').classList.add('hidden');
+    document.getElementById('quote-page').style.display='flex';
+  }else{
+    document.getElementById('pw-error').classList.add('show');
+    input.value='';input.focus();
+    setTimeout(()=>{document.getElementById('pw-error').classList.remove('show');},2000);
+  }
+}
+// Auto-focus password input
+document.addEventListener('DOMContentLoaded',()=>{const pi=document.getElementById('pw-input');if(pi)pi.focus();});
+
+function enterDeck() {
+  const q = document.getElementById('quote-page');
+  const d = document.getElementById('deck-content');
+  q.style.transition = 'opacity 0.8s ease'; q.style.opacity = '0';
+  setTimeout(() => {
+    q.style.display = 'none'; d.style.display = 'block';
+    setTimeout(() => { d.style.opacity = '1'; document.getElementById('sidebar').classList.remove('hidden'); }, 50);
+  }, 800);
+}
+
+function initSolarSystem() {
+  const canvas = document.getElementById('solar-canvas');
+  const container = document.getElementById('solar-system-container');
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 200);
+  const isMobile = window.innerWidth < 768;
+  camera.position.set(0, isMobile?28:22, isMobile?42:32); camera.lookAt(0,0,0);
+  originalCameraPos = camera.position.clone();
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x080816, 1);
+  raycaster = new THREE.Raycaster(); mouse = new THREE.Vector2();
+
+  // Stars — brighter, more varied
+  const sg = new THREE.BufferGeometry(), sp = [], sc = [];
+  for (let i=0;i<3000;i++){
+    sp.push((Math.random()-0.5)*180,(Math.random()-0.5)*180,(Math.random()-0.5)*180);
+    const b=0.4+Math.random()*0.6; sc.push(b,b,Math.min(1,b+Math.random()*0.2));
+  }
+  sg.setAttribute('position', new THREE.Float32BufferAttribute(sp,3));
+  sg.setAttribute('color', new THREE.Float32BufferAttribute(sc,3));
+  scene.add(new THREE.Points(sg, new THREE.PointsMaterial({size:0.15,transparent:true,opacity:0.8,vertexColors:true})));
+
+  // Brighter ambient + directional fill
+  scene.add(new THREE.AmbientLight(0x8090b0, 0.7));
+  const dirLight = new THREE.DirectionalLight(0xfff0e0, 0.4);
+  dirLight.position.set(0, 10, 5); scene.add(dirLight);
+
+  // ===== SUN — vivid multi-layer fire =====
+  // White-hot core
+  sun = new THREE.Mesh(new THREE.SphereGeometry(1.8,48,48), new THREE.MeshBasicMaterial({color:0xffffff}));
+  sun.userData = { isSun:true, name:'Sun' }; scene.add(sun);
+  // Layer 1: intense yellow
+  sunGlowInner = new THREE.Mesh(new THREE.SphereGeometry(2.3,32,32), new THREE.MeshBasicMaterial({color:0xffcc00,transparent:true,opacity:0.45}));
+  sun.add(sunGlowInner);
+  // Layer 2: deep orange fire
+  sunGlowOuter = new THREE.Mesh(new THREE.SphereGeometry(3.0,32,32), new THREE.MeshBasicMaterial({color:0xff6600,transparent:true,opacity:0.22}));
+  sun.add(sunGlowOuter);
+  // Layer 3: red corona
+  sunCorona = new THREE.Mesh(new THREE.SphereGeometry(4.0,32,32), new THREE.MeshBasicMaterial({color:0xff3300,transparent:true,opacity:0.10}));
+  sun.add(sunCorona);
+  // Layer 4: faint outer haze (contained to not engulf Mercury)
+  const sunHaze = new THREE.Mesh(new THREE.SphereGeometry(4.5,32,32), new THREE.MeshBasicMaterial({color:0xff6600,transparent:true,opacity:0.035}));
+  sun.add(sunHaze);
+  // Light emission — warm and strong
+  sun.add(new THREE.PointLight(0xffaa44,3.0,90));
+  sun.add(new THREE.PointLight(0xffffff,0.8,70));
+
+  // ===== PLANETS — realistic colours, glow halos =====
+  PLANET_DATA.forEach((pd,i) => {
+    const mat = new THREE.MeshPhongMaterial({color:pd.color,emissive:pd.color,emissiveIntensity:0.2,shininess:40});
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(pd.size,32,32), mat);
+    mesh.userData = {isPlanet:true, index:i, name:pd.name, ...pd};
+    mesh.position.set(Math.cos(pd.startAngle)*pd.orbit, 0, Math.sin(pd.startAngle)*pd.orbit);
+    scene.add(mesh); planets.push(mesh); planetMeshes.push(mesh);
+
+    // Glow halo ring — uniform cyan fluorescent, thin
+    const haloInner = pd.size * 1.12;
+    const haloOuter = pd.size * 1.5;
+    const haloMat = new THREE.MeshBasicMaterial({color:0x00ddff,transparent:true,opacity:0.55,side:THREE.DoubleSide});
+    const halo = new THREE.Mesh(new THREE.RingGeometry(haloInner, haloOuter, 64), haloMat);
+    halo.lookAt(camera.position);
+    mesh.add(halo); halo.userData = {isHalo:true};
+    planetGlows.push(halo);
+
+    // Orbit line
+    const oMat = new THREE.MeshBasicMaterial({color:0x4466aa,transparent:true,opacity:0.08,side:THREE.DoubleSide});
+    const oMesh = new THREE.Mesh(new THREE.RingGeometry(pd.orbit-0.02,pd.orbit+0.02,128), oMat);
+    oMesh.rotation.x = -Math.PI/2; scene.add(oMesh);
+  });
+
+  // Saturn ring
+  const si = PLANET_DATA.findIndex(p=>p.name==='Saturn');
+  if(si>=0){
+    const r=new THREE.Mesh(new THREE.RingGeometry(0.9,1.4,48),new THREE.MeshBasicMaterial({color:0xd4c090,transparent:true,opacity:0.35,side:THREE.DoubleSide}));
+    r.rotation.x=Math.PI/3;planets[si].add(r);
+  }
+  // Earth atmosphere hint
+  const ei = PLANET_DATA.findIndex(p=>p.name==='Earth');
+  if(ei>=0){
+    const atm = new THREE.Mesh(new THREE.SphereGeometry(PLANET_DATA[ei].size*1.08,32,32), new THREE.MeshBasicMaterial({color:0x88ccff,transparent:true,opacity:0.15}));
+    planets[ei].add(atm);
+  }
+
+  // Asteroids — with cyan glow halo ring
+  const ag=new THREE.BufferGeometry(),ap=[],ac=[];
+  for(let i=0;i<600;i++){
+    const a=Math.random()*Math.PI*2,r=12.5+(Math.random()-0.5)*2.0;
+    ap.push(Math.cos(a)*r,(Math.random()-0.5)*0.6,Math.sin(a)*r);
+    const b=0.5+Math.random()*0.5;ac.push(b,b*0.85,b*0.7);
+  }
+  ag.setAttribute('position',new THREE.Float32BufferAttribute(ap,3));
+  ag.setAttribute('color',new THREE.Float32BufferAttribute(ac,3));
+  asteroidBelt=new THREE.Points(ag,new THREE.PointsMaterial({size:0.16,transparent:true,opacity:0.85,vertexColors:true}));
+  asteroidBelt.userData={isAsteroid:true,name:'Asteroid Belt'};scene.add(asteroidBelt);
+  // Cyan glow ring for asteroid belt (like planet halos)
+  asteroidGlowMesh=new THREE.Mesh(
+    new THREE.TorusGeometry(12.5,0.25,16,128),
+    new THREE.MeshBasicMaterial({color:0x00ddff,transparent:true,opacity:0.18,side:THREE.DoubleSide})
+  );
+  asteroidGlowMesh.rotation.x=Math.PI/2;asteroidGlowMesh.userData={isAsteroidGlow:true};scene.add(asteroidGlowMesh);
+  // Invisible hitbox for clicking
+  const ah=new THREE.Mesh(new THREE.TorusGeometry(12.5,1.0,8,64),new THREE.MeshBasicMaterial({visible:false}));
+  ah.rotation.x=Math.PI/2;ah.userData={isAsteroid:true,name:'Asteroid Belt'};scene.add(ah);planetMeshes.push(ah);
+
+  // Artistic label — glass-like tooltip
+  labelDiv=document.createElement('div');
+  labelDiv.style.cssText='position:absolute;pointer-events:none;font-family:Merriweather,serif;font-size:0.82rem;font-style:italic;color:#e8e6e3;background:rgba(15,18,35,0.7);backdrop-filter:blur(8px);padding:8px 20px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);opacity:0;transition:opacity 0.4s;white-space:nowrap;letter-spacing:0.04em;box-shadow:0 4px 16px rgba(0,0,0,0.3);';
+  container.appendChild(labelDiv);
+
+  canvas.addEventListener('mousemove', onMouseMove);
+  canvas.addEventListener('click', onCanvasClick);
+  window.addEventListener('resize', ()=>{if(!camera||!renderer)return;camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);if(!panelOpen){const m=window.innerWidth<768;camera.position.set(0,m?28:22,m?42:32);camera.lookAt(0,0,0);originalCameraPos=camera.position.clone();}});
+  animate();
+}
+
+function onMouseMove(e){
+  if(panelOpen||isAnimating)return;
+  mouse.x=(e.clientX/window.innerWidth)*2-1;mouse.y=-(e.clientY/window.innerHeight)*2+1;
+  raycaster.setFromCamera(mouse,camera);
+  const hits=raycaster.intersectObjects(planetMeshes.concat([sun]));
+  const c=document.getElementById('solar-canvas');
+  if(hits.length>0){
+    const ud=hits[0].object.userData;
+    if(ud.isSun&&!sunUnlocked){c.style.cursor='default';labelDiv.style.opacity='0';return;}
+    c.style.cursor='pointer';
+    // Use hit point for asteroids, world position for others
+    const v = ud.isAsteroid ? hits[0].point.clone() : new THREE.Vector3();
+    if(!ud.isAsteroid) hits[0].object.getWorldPosition(v);
+    v.project(camera);
+    const sx=(v.x*0.5+0.5)*window.innerWidth, sy=(-v.y*0.5+0.5)*window.innerHeight;
+    const name=ud.isSun?'Treasury Hub':(ud.isAsteroid?'Bank Fee Analysis':ud.module);
+    const celestial=ud.isSun?'☀ ':(ud.isAsteroid?'✦ Asteroid Belt · ':ud.name+' · ');
+    labelDiv.innerHTML='<span style="opacity:0.5;font-size:0.78rem;">'+celestial+'</span>'+name;
+    // Position label centered above the object
+    labelDiv.style.left=(sx - labelDiv.offsetWidth/2)+'px';
+    labelDiv.style.top=(sy - 44)+'px';
+    labelDiv.style.opacity='1';
+  }else{c.style.cursor='default';labelDiv.style.opacity='0';}
+}
+
+function onCanvasClick(e){
+  if(panelOpen||isAnimating)return;
+  mouse.x=(e.clientX/window.innerWidth)*2-1;mouse.y=-(e.clientY/window.innerHeight)*2+1;
+  raycaster.setFromCamera(mouse,camera);
+  const hits=raycaster.intersectObjects(planetMeshes.concat([sun]));
+  if(hits.length>0){
+    const ud=hits[0].object.userData;
+    if(ud.isSun){if(!sunUnlocked)return;openSunPanel();}
+    else if(ud.isAsteroid)openAsteroidPanel();
+    else if(ud.isPlanet)openPlanetPanel(ud.index);
+  }
+}
+
+const FLOW_ICONS = {
+  'edit':'<path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>',
+  'cpu':'<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>',
+  'check':'<polyline points="20 6 9 17 4 12"/>',
+  'database':'<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>',
+  'file-text':'<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
+  'mic':'<path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/>',
+  'shield':'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  'users':'<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>',
+  'zap':'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/>',
+  'grid':'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
+  'cloud':'<path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/>',
+  'monitor':'<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
+  'alert-triangle':'<path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+  'globe':'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>',
+  'bell':'<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>',
+  'link':'<path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>',
+  'bar-chart':'<line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/>',
+  'file':'<path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13 2 13 9 20 9"/>',
+  'refresh-cw':'<polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>',
+  'check-circle':'<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+  'mail':'<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
+  'layout':'<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>',
+  'credit-card':'<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
+  'trending-up':'<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+  'message-circle':'<path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>',
+  'upload':'<polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/>',
+  'dollar-sign':'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>',
+  'search':'<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>'
+};
+
+function svgIcon(name){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(FLOW_ICONS[name]||'')+'</svg>';
+}
+
+function buildPanelHTML(data){
+  // Build flow diagram
+  let flowHTML = '<div class="panel-flow">';
+  if(data.flow){
+    data.flow.forEach((step,i)=>{
+      const icon = data.flowIcons && data.flowIcons[i] ? svgIcon(data.flowIcons[i]) : '';
+      flowHTML += '<div class="panel-flow-step">'+icon+step+'</div>';
+      if(i < data.flow.length-1) flowHTML += '<span class="panel-flow-arrow">→</span>';
+    });
+  }
+  flowHTML += '</div>';
+
+  return `<div style="margin-top:40px;">
+    <div class="panel-big-icon">${svgIcon(data.flowIcons?data.flowIcons[data.flowIcons.length-1]:'monitor')}</div>
+    <div class="panel-domain">${data.domain}</div>
+    <div class="panel-title">${data.module}</div>
+  </div>
+  <div class="panel-section-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Today</div>
+  <div class="panel-text">${data.today}</div>
+  <div class="panel-section-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg> Tomorrow in the Hub</div>
+  ${flowHTML}
+  <div class="panel-section-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Team Impact</div>
+  <div class="panel-text">${data.teamImpact}</div>
+  <div class="panel-section-label">AI Readiness</div>
+  <span class="ai-ladder ${data.ladderClass}">${data.ladder}</span>`;
+}
+
+function openPlanetPanel(index){
+  panelOpen=true;isAnimating=true;
+  currentPanelType='planet';currentPanelIndex=index;
+  labelDiv.style.opacity='0';
+  document.getElementById('solar-hint').style.opacity='0';
+  const t=planets[index].position.clone();
+  const c=t.clone().add(new THREE.Vector3(3,2,5).normalize().multiplyScalar(4));
+  animateCamera(c,t,1200,()=>{
+    isAnimating=false;
+    document.getElementById('panel-content').innerHTML=buildPanelHTML(PLANET_DATA[index]);
+    document.getElementById('planet-panel').classList.add('open');
+  });
+}
+
+function openAsteroidPanel(){
+  panelOpen=true;isAnimating=true;
+  currentPanelType='asteroid';currentPanelIndex=-1;
+  labelDiv.style.opacity='0';
+  document.getElementById('solar-hint').style.opacity='0';
+  animateCamera(new THREE.Vector3(6,4,10),new THREE.Vector3(11.5,0,0),1200,()=>{
+    isAnimating=false;
+    document.getElementById('panel-content').innerHTML=buildPanelHTML(ASTEROID_DATA);
+    document.getElementById('planet-panel').classList.add('open');
+  });
+}
+
+function closePlanetPanel(){
+  document.getElementById('planet-panel').classList.remove('open');
+  panelOpen=false;isAnimating=true;
+  // Mark as read using stored type/index
+  if(currentPanelType==='asteroid'){
+    readPlanets.add('asteroid');
+    asteroidBelt.material.opacity=0.25;
+    if(asteroidGlowMesh)asteroidGlowMesh.visible=false;
+  } else if(currentPanelType==='planet'&&currentPanelIndex>=0){
+    readPlanets.add(currentPanelIndex);
+    planets[currentPanelIndex].material.emissiveIntensity=0.08;
+    planets[currentPanelIndex].material.opacity=0.5;
+    planets[currentPanelIndex].material.transparent=true;
+    if(planetGlows[currentPanelIndex])planetGlows[currentPanelIndex].visible=false;
+  }
+  currentPanelType=null;currentPanelIndex=-1;
+  updateProgress();
+  animateCamera(originalCameraPos.clone(),new THREE.Vector3(0,0,0),1000,()=>{isAnimating=false;checkAllRead();});
+}
+
+function openSunPanel(){
+  panelOpen=true;isAnimating=true;
+  labelDiv.style.opacity='0';
+  animateCamera(new THREE.Vector3(0,35,0.01),new THREE.Vector3(0,0,0),1500,()=>{
+    isAnimating=false;drawConnectionLines();
+    setTimeout(()=>{document.getElementById('sun-panel').classList.add('open');},1500);
+  });
+}
+
+function closeSunPanel(){
+  document.getElementById('sun-panel').classList.remove('open');
+  panelOpen=false;isAnimating=true;sunRead=true;removeConnectionLines();
+  animateCamera(originalCameraPos.clone(),new THREE.Vector3(0,0,0),1000,()=>{
+    isAnimating=false;document.getElementById('continue-btn').classList.add('visible');
+  });
+}
+
+function drawConnectionLines(){
+  planets.forEach((p,i)=>{setTimeout(()=>{
+    // Electric arc: create multiple segments with slight random offsets
+    const origin=new THREE.Vector3(0,0.5,0);
+    const target=p.position.clone(); target.y+=0.2;
+    const segments=20;
+    const points=[];
+    for(let s=0;s<=segments;s++){
+      const t=s/segments;
+      const pt=new THREE.Vector3().lerpVectors(origin,target,t);
+      if(s>0&&s<segments){
+        const spread=Math.sin(t*Math.PI)*0.4;
+        pt.x+=(Math.random()-0.5)*spread;
+        pt.y+=(Math.random()-0.5)*spread*0.5;
+        pt.z+=(Math.random()-0.5)*spread;
+      }
+      points.push(pt);
+    }
+    const g=new THREE.BufferGeometry().setFromPoints(points);
+    const m=new THREE.LineBasicMaterial({color:0x66ccff,transparent:true,opacity:0.6});
+    const l=new THREE.Line(g,m);
+    l.userData={targetPlanet:i,segCount:segments};
+    scene.add(l);connectionLines.push(l);
+
+    // Glow line
+    const g2=new THREE.BufferGeometry().setFromPoints(points);
+    const m2=new THREE.LineBasicMaterial({color:0x99ddff,transparent:true,opacity:0.15,linewidth:2});
+    const l2=new THREE.Line(g2,m2);
+    l2.userData={isGlow:true,targetPlanet:i,segCount:segments};
+    scene.add(l2);connectionLines.push(l2);
+  },i*150);});
+}
+
+function removeConnectionLines(){
+  connectionLines.forEach(l=>{scene.remove(l);l.geometry.dispose();l.material.dispose();});
+  connectionLines=[];
+  electricParticles.forEach(p=>{scene.remove(p);p.geometry.dispose();p.material.dispose();});
+  electricParticles=[];
+}
+
+function updateProgress(){document.getElementById('planet-progress').textContent=`${readPlanets.size} / ${PLANET_DATA.length+1} explored · explore all to continue`;}
+function checkAllRead(){
+  if(readPlanets.size>=PLANET_DATA.length+1&&!sunUnlocked){
+    sunUnlocked=true;
+    document.getElementById('solar-hint').style.opacity='0';
+    document.getElementById('planet-progress').style.opacity='0';
+    const sh=document.getElementById('sun-hint');
+    sh.style.opacity='1';sh.classList.add('visible');
+  }
+}
+
+function animateCamera(tp,lt,dur,cb){
+  const sp=camera.position.clone(),sl=new THREE.Vector3();camera.getWorldDirection(sl);sl.multiplyScalar(10).add(camera.position);
+  const st=performance.now();
+  (function u(){const t=Math.min((performance.now()-st)/dur,1);const e=t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+    camera.position.lerpVectors(sp,tp,e);camera.lookAt(new THREE.Vector3().lerpVectors(sl,lt,e));
+    if(t<1)requestAnimationFrame(u);else{camera.lookAt(lt);if(cb)cb();}
+  })();
+}
+
+function animate(){
+  if(solarSystemActive){
+    const t=performance.now()*0.001;
+
+    // Planet orbits
+    PLANET_DATA.forEach((pd,i)=>{
+      const a=pd.startAngle+t*pd.speed*2;
+      planets[i].position.set(Math.cos(a)*pd.orbit,0,Math.sin(a)*pd.orbit);
+      planets[i].rotation.y+=0.006;
+    });
+
+    // Asteroid belt rotation
+    if(asteroidBelt)asteroidBelt.rotation.y+=0.0003;
+
+    // Sun fire: vivid pulsing at different frequencies
+    if(sunGlowInner){
+      sunGlowInner.material.opacity=0.35+Math.sin(t*3.5)*0.12+Math.sin(t*8)*0.06;
+      sunGlowInner.scale.setScalar(1+Math.sin(t*2.5)*0.08);
+    }
+    if(sunGlowOuter){
+      sunGlowOuter.material.opacity=0.18+Math.sin(t*1.9+1)*0.06+Math.sin(t*5.5)*0.03;
+      sunGlowOuter.scale.setScalar(1+Math.sin(t*1.6)*0.1);
+    }
+    if(sunCorona){
+      sunCorona.material.opacity=0.08+Math.sin(t*1.2+2)*0.04;
+      sunCorona.scale.setScalar(1+Math.sin(t*0.8)*0.12);
+    }
+    // Sun core: shift between white-hot and golden
+    if(sun){
+      const warmth=Math.sin(t*2)*0.5+0.5;
+      sun.material.color.setRGB(1, 0.88+warmth*0.12, 0.65+warmth*0.2);
+    }
+
+    // Sun unlock pulse
+    if(sunUnlocked&&!sunRead){const p=0.95+Math.sin(t*3)*0.08;sun.scale.set(p,p,p);}
+
+    // Glow halos billboard toward camera
+    planetGlows.forEach(h=>{if(h.visible)h.lookAt(camera.position);});
+
+    // Glow halo pulse for unread planets — cyan fluorescent
+    planetGlows.forEach((h,i)=>{
+      if(h.visible&&!readPlanets.has(i)){
+        h.material.opacity=0.4+Math.sin(t*2.5+i*0.7)*0.18;
+      }
+    });
+    // Asteroid belt glow pulse
+    if(asteroidGlowMesh&&asteroidGlowMesh.visible){
+      asteroidGlowMesh.material.opacity=0.14+Math.sin(t*2)*0.08;
+    }
+
+    // Electric connection lines jitter
+    connectionLines.forEach(l=>{
+      if(l.userData.targetPlanet!==undefined&&!l.userData.isGlow){
+        const idx=l.userData.targetPlanet;
+        const target=planets[idx].position.clone();target.y+=0.2;
+        const origin=new THREE.Vector3(0,0.5,0);
+        const pos=l.geometry.attributes.position;
+        const segs=l.userData.segCount;
+        for(let s=0;s<=segs;s++){
+          const frac=s/segs;
+          const px=origin.x+(target.x-origin.x)*frac;
+          const py=origin.y+(target.y-origin.y)*frac;
+          const pz=origin.z+(target.z-origin.z)*frac;
+          if(s>0&&s<segs){
+            const jitter=Math.sin(frac*Math.PI)*0.25;
+            pos.setXYZ(s,px+(Math.sin(t*12+s*3+idx))*jitter,py+(Math.cos(t*10+s*2))*jitter*0.3,pz+(Math.sin(t*11+s*4+idx*2))*jitter);
+          }else{
+            pos.setXYZ(s,s===0?origin.x:target.x,s===0?origin.y:target.y,s===0?origin.z:target.z);
+          }
+        }
+        pos.needsUpdate=true;
+      }
+      // Mirror for glow lines
+      if(l.userData.isGlow&&l.userData.targetPlanet!==undefined){
+        const idx=l.userData.targetPlanet;
+        const src=connectionLines.find(cl=>cl.userData.targetPlanet===idx&&!cl.userData.isGlow);
+        if(src){
+          const srcPos=src.geometry.attributes.position;
+          const pos=l.geometry.attributes.position;
+          for(let s=0;s<=l.userData.segCount;s++){
+            pos.setXYZ(s,srcPos.getX(s),srcPos.getY(s),srcPos.getZ(s));
+          }
+          pos.needsUpdate=true;
+        }
+      }
+    });
+  }
+  renderer.render(scene,camera);requestAnimationFrame(animate);
+}
+
+function enterSolarSystem(){
+  document.getElementById('sidebar').classList.add('hidden');
+  if(!scene)initSolarSystem();
+  document.getElementById('solar-system-container').classList.add('active');
+  solarSystemActive=true;document.getElementById('deck-content').style.display='none';
+  camera.position.copy(originalCameraPos);camera.lookAt(0,0,0);
+}
+
+function exitSolarSystem(){
+  solarSystemActive=false;
+  document.getElementById('solar-system-container').classList.remove('active');
+  const d=document.getElementById('deck-content');d.style.display='block';d.style.opacity='1';
+  document.getElementById('sidebar').classList.remove('hidden');
+  // Unlock chapters 5-8
+  document.querySelectorAll('.chapter-locked').forEach(el=>el.classList.remove('chapter-locked'));
+  document.querySelectorAll('#sidebar a.sidebar-locked').forEach(a=>a.classList.remove('sidebar-locked'));
+  // Show ch3 scroll hint now that solar system is done
+  const ch3Hint=document.querySelector('.ch3-hint');if(ch3Hint)ch3Hint.classList.add('active');
+  setTimeout(()=>{document.getElementById('ch5').scrollIntoView({behavior:'smooth'});},100);
+}
+
+// Inject scroll-down hints into every chapter section (except ch8 closing)
+function injectScrollHints(){
+  const chevrons='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 13l5 5 5-5"/><path d="M7 6l5 5 5-5"/></svg>';
+  document.querySelectorAll('.chapter-section').forEach(sec=>{
+    if(sec.querySelector('.scroll-hint'))return; // already added
+    const hint=document.createElement('div');
+    hint.className='scroll-hint'+(sec.id==='ch3'?' ch3-hint':'');
+    hint.innerHTML=chevrons+'<span>Scroll down</span>';
+    sec.appendChild(hint);
+  });
+}
+injectScrollHints();
+
+// Sidebar scroll tracking
+window.addEventListener('scroll',()=>{
+  if(solarSystemActive)return;
+  const secs=document.querySelectorAll('.chapter-section:not(.chapter-locked),.closing-page:not(.chapter-locked)');
+  let cur='';
+  secs.forEach(s=>{
+    const rect=s.getBoundingClientRect();
+    if(rect.top<=150)cur=s.id;
+  });
+  document.querySelectorAll('#sidebar a').forEach(a=>{
+    const ch=a.getAttribute('data-ch');
+    if(ch==='4'){a.classList.toggle('active',solarSystemActive);return;}
+    a.classList.toggle('active',a.getAttribute('href')==='#'+cur);
+  });
+});
+</script>
+</body>
+</html>
