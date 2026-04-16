@@ -483,21 +483,22 @@
     .closing-page { padding: 40px 20px; margin-left: 0 !important; }
     .letter-card { padding: 40px 28px 36px; max-width: 100%; }
     #planet-panel, #sun-panel { width: 100%; padding: 50px 24px; }
-    .pain-grid, .vision-grid, .principle-grid { grid-template-columns: 1fr; }
-    .sun-card-grid { grid-template-columns: 1fr; }
-    .home-mock-grid { grid-template-columns: 1fr; }
+    .pain-grid, .vision-grid, .principle-grid { grid-template-columns: 1fr !important; }
+    .sun-card-grid { grid-template-columns: 1fr !important; }
+    .home-mock-grid { grid-template-columns: 1fr !important; }
     .impact-table { font-size: 0.78rem; }
     .impact-table th, .impact-table td { padding: 8px 10px; }
     .panel-flow { flex-direction: column; align-items: stretch; }
     .panel-flow-arrow { transform: rotate(90deg); align-self: center; margin: 4px 0; }
     .panel-flow-step { flex-direction: row; }
-    .vision-card[style*="grid-column"] { grid-column: span 1; }
+    .vision-card[style*="grid-column"] { grid-column: span 1 !important; }
     .arch-container svg { font-size: 8px; }
     .enter-solar-btn { width: 100%; }
     #quote-page blockquote { font-size: 1.1rem; line-height: 1.9; }
     .chapter-title { font-size: 1.6rem; }
     .panel-title { font-size: 1.4rem; }
     /* Ch3 shift-compare responsive */
+    .shift-compare { max-width: 100% !important; }
     .shift-compare > div:last-child { grid-template-columns: 1fr !important; gap: 0 !important; }
     .shift-compare > div:last-child > div:first-child { border-radius: 12px 12px 0 0 !important; border-right: 1px solid rgba(200,16,46,0.1) !important; border-bottom: none !important; }
     .shift-compare > div:last-child > div:nth-child(2) { background: linear-gradient(180deg,#fdf2f3,#edf7ee) !important; padding: 8px 0; }
@@ -508,6 +509,18 @@
     .home-mock > div:nth-child(3) > div { border-right: none !important; }
     /* Solar system skip button */
     #solar-skip-btn { top: 12px; left: 12px; font-size: 0.6rem; padding: 4px 10px; }
+  }
+  /* Portrait phone — extra aggressive single-column */
+  @media (max-width: 480px) {
+    .chapter-section { padding: 32px 16px; }
+    .chapter-title { font-size: 1.35rem; }
+    .vision-grid, .pain-grid, .principle-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+    .shift-compare > div:last-child > div { padding: 20px 18px !important; }
+    .home-mock { max-width: 100% !important; }
+    .letter-card { padding: 32px 22px 28px; }
+    .letter-body { font-size: 1.5rem; }
+    .letter-sig .sig-name { font-size: 1.8rem; }
+    .letter-sig .sig-detail { font-size: 0.88rem; }
   }
   /* Scroll-down indicators */
   .scroll-hint{text-align:center;padding:28px 0 8px;animation:scrollBounce 2s ease-in-out infinite;}
@@ -536,8 +549,8 @@
 <div id="quote-page" style="display:none;" onclick="enterDeck()">
   <div class="quote-text">
     <blockquote>
-      "AI is a multiplier — the constant in an equation where human creativity is the variable.
-      A positive mind produces compounding value; a negative one produces compounding waste.
+      "AI is a multiplier —<br>the constant in an equation where human creativity is the variable.<br><br>
+      A positive mind produces compounding value;<br>a negative one produces compounding waste.<br><br>
       The technology is the same. The difference is who holds it."
     </blockquote>
     <div class="quote-attr">— Anonymous</div>
@@ -1386,9 +1399,12 @@ function initSolarSystem() {
   const canvas = document.getElementById('solar-canvas');
   const container = document.getElementById('solar-system-container');
   scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 200);
-  const isMobile = window.innerWidth < 768;
-  camera.position.set(0, isMobile?28:22, isMobile?42:32); camera.lookAt(0,0,0);
+  const aspect = window.innerWidth/window.innerHeight;
+  const isPortrait = aspect < 1;
+  const fov = isPortrait ? 65 : 50;
+  camera = new THREE.PerspectiveCamera(fov, aspect, 0.1, 200);
+  // Portrait: pull camera way back and higher so all orbits fit the narrow width
+  camera.position.set(0, isPortrait?36:22, isPortrait?52:32); camera.lookAt(0,0,0);
   originalCameraPos = camera.position.clone();
   renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -1495,7 +1511,7 @@ function initSolarSystem() {
 
   canvas.addEventListener('mousemove', onMouseMove);
   canvas.addEventListener('click', onCanvasClick);
-  window.addEventListener('resize', ()=>{if(!camera||!renderer)return;camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);if(!panelOpen){const m=window.innerWidth<768;camera.position.set(0,m?28:22,m?42:32);camera.lookAt(0,0,0);originalCameraPos=camera.position.clone();}});
+  window.addEventListener('resize', ()=>{if(!camera||!renderer)return;const a=window.innerWidth/window.innerHeight;const p=a<1;camera.aspect=a;camera.fov=p?65:50;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);if(!panelOpen){camera.position.set(0,p?36:22,p?52:32);camera.lookAt(0,0,0);originalCameraPos=camera.position.clone();}});
   animate();
 }
 
