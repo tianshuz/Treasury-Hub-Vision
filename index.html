@@ -477,6 +477,107 @@
   @keyframes fadeIn { to { opacity: 0.5; } }
   @keyframes bounceRight { 0%,100% { transform: translateX(0); } 50% { transform: translateX(6px); } }
 
+  /* ==================== CH5.5 LIVING HUB ==================== */
+  .living-hub-section { background: var(--bg-white); }
+  .living-hub-section .lh-helper { font-size: 0.92rem; color: var(--edwards-red); margin: 14px 0 18px; line-height: 1.55; max-width: 880px; }
+  .living-hub-section .lh-helper .reset-hint {
+    display: inline-block; margin-left: 8px; padding: 4px 12px; border-radius: 14px;
+    background: #f2eae6; font-size: 0.82rem; color: var(--text-secondary); cursor: pointer;
+    vertical-align: 1px;
+  }
+  .living-hub-section .lh-helper .reset-hint:hover { background: #ecdcd2; color: var(--edwards-red); }
+  .living-hub-section .lh-legend {
+    max-width: 1120px; margin: 0 0 14px; padding: 12px 18px;
+    background: #fff; border: 1px solid #ebe5dd; border-radius: 10px;
+    display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center;
+    font-size: 0.82rem; line-height: 1.4; color: var(--text-secondary);
+  }
+  .living-hub-section .lh-legend .item { display: flex; align-items: center; gap: 8px; color: var(--text-primary); }
+  .living-hub-section .lh-legend .pulse-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: #27c93f; box-shadow: 0 0 0 4px rgba(39,201,63,0.22);
+  }
+  .living-hub-section .lh-legend .line-sample { display: inline-block; width: 28px; height: 3.5px; border-radius: 2px; background: var(--edwards-red); }
+  .living-hub-section .lh-legend .line-dashed { display: inline-block; width: 28px; height: 0; border-top: 2px dashed #8E6FB8; }
+  .living-hub-section .lh-legend .colour-chip {
+    display: inline-block; width: 20px; height: 14px; border-radius: 4px;
+    background: linear-gradient(90deg,#E08A2C,#C8102E,#7748C8); opacity: 0.75;
+  }
+  .living-hub-section .lh-legend-secondary {
+    margin-top: -10px; padding: 8px 18px; background: transparent;
+    border: none; border-top: 1px dashed #ebe5dd; border-radius: 0; margin-bottom: 22px;
+    max-width: 1120px;
+  }
+  .living-hub-section .lh-legend .note { color: var(--text-secondary); font-style: italic; font-size: 0.78rem; }
+  .living-hub-section .lh-svg-wrap { max-width: 1700px; }
+  .living-hub-section svg.living-hub-svg { width: 100%; height: auto; display: block; }
+
+  @keyframes lh-pulse-1 {
+    0%, 100% { r: 7; opacity: 1; }
+    50% { r: 10; opacity: 0.6; }
+  }
+  @keyframes lh-pulse-halo {
+    0%, 100% { r: 13; opacity: 0.5; }
+    50% { r: 22; opacity: 0; }
+  }
+  .living-hub-section .live-dot  { animation: lh-pulse-1 2.6s ease-in-out infinite; fill: #27c93f; }
+  .living-hub-section .live-halo { animation: lh-pulse-halo 2.6s ease-in-out infinite; fill: #27c93f; }
+  .living-hub-section .live-1 { animation-delay: 0s; }
+  .living-hub-section .live-2 { animation-delay: 0.7s; }
+  .living-hub-section .live-3 { animation-delay: 1.4s; }
+
+  .living-hub-section .module-card {
+    cursor: pointer;
+    transition: opacity 0.35s ease, stroke-width 0.2s ease, filter 0.2s ease, transform 0.2s ease, fill-opacity 0.2s ease;
+    transform-origin: center; transform-box: fill-box;
+  }
+  .living-hub-section .module-card:hover {
+    filter: drop-shadow(0 6px 18px rgba(0,0,0,0.28)) brightness(1.05);
+    stroke-width: 4 !important; stroke-opacity: 1 !important;
+    fill-opacity: 0.17 !important; transform: scale(1.025);
+  }
+  @keyframes lh-invite {
+    0%, 100% { stroke-opacity: 0.55; }
+    50%      { stroke-opacity: 0.95; }
+  }
+  .living-hub-section svg.living-hub-svg:not(.focus-active) .module-card { animation: lh-invite 3.2s ease-in-out infinite; }
+  .living-hub-section svg.living-hub-svg:not(.focus-active) .module-card[data-mod="icloan"]  { animation-delay: 0s;   }
+  .living-hub-section svg.living-hub-svg:not(.focus-active) .module-card[data-mod="invest"]  { animation-delay: 0.3s; }
+  .living-hub-section svg.living-hub-svg:not(.focus-active) .module-card[data-mod="ma"]      { animation-delay: 0.6s; }
+  .living-hub-section svg.living-hub-svg:not(.focus-active) .module-card[data-mod="cash"]    { animation-delay: 0.9s; }
+  .living-hub-section svg.living-hub-svg:not(.focus-active) .module-card[data-mod="wc"]      { animation-delay: 1.2s; }
+  .living-hub-section svg.living-hub-svg:not(.focus-active) .module-card[data-mod="netting"] { animation-delay: 1.5s; }
+  .living-hub-section svg.living-hub-svg:not(.focus-active) .module-card[data-mod="fx"]      { animation-delay: 1.8s; }
+  .living-hub-section svg.living-hub-svg:not(.focus-active) .module-card[data-mod="tf"]      { animation-delay: 2.1s; }
+  .living-hub-section svg.living-hub-svg:not(.focus-active) .module-card[data-mod="cc"]      { animation-delay: 2.4s; }
+  .living-hub-section svg.living-hub-svg:not(.focus-active) .module-card[data-mod="fee"]     { animation-delay: 2.7s; }
+  .living-hub-section svg.living-hub-svg:not(.focus-active) .module-card[data-mod="ics"]     { animation-delay: 3.0s; }
+  .living-hub-section .module-card:hover { animation: none !important; }
+
+  .living-hub-section .flow, .living-hub-section .src, .living-hub-section .out,
+  .living-hub-section .module-card, .living-hub-section .module-label,
+  .living-hub-section .module-inner-text, .living-hub-section .demo-node {
+    transition: opacity 0.4s ease, stroke-width 0.4s ease;
+  }
+  .living-hub-section svg.focus-active .flow,
+  .living-hub-section svg.focus-active .src,
+  .living-hub-section svg.focus-active .out,
+  .living-hub-section svg.focus-active .module-card,
+  .living-hub-section svg.focus-active .module-label,
+  .living-hub-section svg.focus-active .module-inner-text,
+  .living-hub-section svg.focus-active .demo-node,
+  .living-hub-section svg.focus-active .kyriba-spine {
+    opacity: 0.06;
+  }
+  .living-hub-section svg.focus-active .highlight { opacity: 1 !important; }
+  .living-hub-section svg.focus-active .flow.highlight { stroke-width: 3.2 !important; }
+  .living-hub-section svg.focus-active .module-card.highlight {
+    stroke-width: 3.5 !important; filter: drop-shadow(0 0 8px rgba(0,0,0,0.18));
+  }
+  .living-hub-section svg.focus-active .semi-highlight { opacity: 0.45 !important; }
+  .living-hub-section svg.focus-active .module-card.semi-highlight { stroke-width: 2 !important; }
+  .living-hub-section svg.focus-active .always-on { opacity: 1 !important; }
+
   @media (max-width: 768px) {
     #sidebar { display: none; }
     .chapter-section { margin-left: 0; padding: 40px 20px; }
@@ -566,6 +667,7 @@
   <a href="#ch3" data-ch="3">3 — The Vision</a>
   <a href="#" data-ch="4" onclick="enterSolarSystem(); return false;">4 — The Modules ◉</a>
   <a href="#ch5" data-ch="5" class="sidebar-locked">5 — Architecture</a>
+  <a href="#ch5b" data-ch="5b" class="sidebar-locked">5½ — The Living Hub</a>
   <a href="#ch6" data-ch="6" class="sidebar-locked">6 — Home Page</a>
   <a href="#ch7" data-ch="7" class="sidebar-locked">7 — Team Impact</a>
   <a href="#ch8" data-ch="8" class="sidebar-locked">8 — Closing</a>
@@ -861,6 +963,590 @@
         <div class="principle-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
         <div><h4>Source-Side Standardisation</h4><p>Push upstream systems to output clean data.</p></div>
       </div>
+    </div>
+  </section>
+
+
+
+  <!-- CH5.5 LIVING HUB -->
+  <section id="ch5b" class="chapter-section chapter-locked living-hub-section">
+    <div class="chapter-label">Chapter 5½</div>
+    <h2 class="chapter-title">The Living Hub</h2>
+    <p>Every flow you've seen, actually connected. Three nodes are already running as working demos — pulsing in green.</p>
+
+    <div class="lh-helper">
+      Click any module card to isolate its end-to-end data flow. Click again or anywhere else to reset.<span class="reset-hint" id="lhResetBtn">Reset view</span>
+    </div>
+
+    <div class="lh-legend">
+      <div class="item"><span class="colour-chip"></span><span>Each module owns a colour — its inputs &amp; outputs share it</span></div>
+      <div class="item"><span class="line-sample"></span><span>Shared Kyriba payment channel</span></div>
+      <div class="item"><span class="line-dashed"></span><span>ICS reads every module above</span></div>
+    </div>
+    <div class="lh-legend lh-legend-secondary">
+      <div class="item"><span class="pulse-dot"></span><span>Already built — working demo</span></div>
+      <div class="item note">Inter-module dependency lines are coloured by destination.</div>
+    </div>
+
+    <div class="lh-svg-wrap">
+<svg id="livingHub" class="living-hub-svg" viewBox="0 0 1700 1800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="softBlur"><feGaussianBlur stdDeviation="6"/></filter>
+
+    <marker id="arr-icloan"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#E08A2C"/></marker>
+    <marker id="arr-invest"  viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#D4A823"/></marker>
+    <marker id="arr-ma"      viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#5B6B8C"/></marker>
+    <marker id="arr-cash"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#C8102E"/></marker>
+    <marker id="arr-wc"      viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#B8542C"/></marker>
+    <marker id="arr-netting" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#6B8E6F"/></marker>
+    <marker id="arr-fx"      viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#3E7B8C"/></marker>
+    <marker id="arr-tf"      viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#4A8A7A"/></marker>
+    <marker id="arr-cc"      viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7748C8"/></marker>
+    <marker id="arr-fee"     viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#D6663C"/></marker>
+    <marker id="arr-ics"     viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#8E6FB8"/></marker>
+    <!-- Larger arrow for the prominent Kyriba spine → Kyriba node feed -->
+    <marker id="arr-cash-big" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="9" markerHeight="9" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#C8102E"/></marker>
+
+    <linearGradient id="kyribaArc" x1="0" x2="1">
+      <stop offset="0%"   stop-color="#7a5a3a" stop-opacity="0"/>
+      <stop offset="50%"  stop-color="#7a5a3a" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#7a5a3a" stop-opacity="0"/>
+    </linearGradient>
+
+    <linearGradient id="aiRibbon" x1="0" x2="1">
+      <stop offset="0%"   stop-color="#C8102E" stop-opacity="0"/>
+      <stop offset="50%"  stop-color="#C8102E" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#C8102E" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ============ ZONE LABELS — visual region flags ============ -->
+  <!-- Each zone label sits inside a soft pill with a colour-band underline that
+       spans the full width of the region it covers. -->
+  <g class="always-on">
+    <!-- SOURCES IN — left zone (x=40..340) -->
+    <rect x="40" y="8" width="300" height="34" rx="17" fill="#f1eee5" stroke="#e0dcd0" stroke-width="1"/>
+    <text x="190" y="31" text-anchor="middle" font-size="19" font-weight="700" letter-spacing="3" fill="#7a7568">SOURCES IN</text>
+    <line x1="40" y1="50" x2="340" y2="50" stroke="#9e9684" stroke-width="2.5" opacity="0.55" stroke-linecap="round"/>
+
+    <!-- MODULES &amp; AI LAYER — centre zone (x=355..1175) -->
+    <rect x="355" y="8" width="820" height="34" rx="17" fill="rgba(200,16,46,0.06)" stroke="rgba(200,16,46,0.22)" stroke-width="1"/>
+    <text x="765" y="31" text-anchor="middle" font-size="19" font-weight="700" letter-spacing="3" fill="#C8102E">MODULES &amp; AI LAYER</text>
+    <line x1="355" y1="50" x2="1175" y2="50" stroke="#C8102E" stroke-width="2.5" opacity="0.55" stroke-linecap="round"/>
+
+    <!-- OUTPUTS &amp; EXECUTION — right zone (x=1190..1660) -->
+    <rect x="1190" y="8" width="470" height="34" rx="17" fill="#eaf0ea" stroke="#cbd9cd" stroke-width="1"/>
+    <text x="1425" y="31" text-anchor="middle" font-size="19" font-weight="700" letter-spacing="3" fill="#3d6543">OUTPUTS &amp; EXECUTION</text>
+    <line x1="1190" y1="50" x2="1660" y2="50" stroke="#3d6543" stroke-width="2.5" opacity="0.55" stroke-linecap="round"/>
+  </g>
+
+  <line x1="345"  y1="60" x2="345"  y2="1780" class="always-on" stroke="#cbb" stroke-width="0.5" stroke-dasharray="4,6" opacity="0.4"/>
+  <line x1="1185" y1="60" x2="1185" y2="1780" class="always-on" stroke="#cbb" stroke-width="0.5" stroke-dasharray="4,6" opacity="0.4"/>
+
+  <!-- AI ribbon -->
+  <rect x="525" y="85" width="650" height="1530" class="always-on" fill="url(#aiRibbon)" opacity="0.6"/>
+  <text x="850" y="78" class="always-on" text-anchor="middle" font-size="13" font-weight="600" letter-spacing="3" fill="#C8102E" opacity="0.55">AI LAYER · CLASSIFY · EXTRACT · APPLY RULES · ANOMALY DETECT · ADVISE</text>
+
+  <!--
+    ============================================================
+    MODULE CARDS — each tagged data-mod="<key>" for JS interaction
+    ============================================================
+  -->
+  <rect class="module-card" data-mod="icloan"  x="530" y="95"   width="640" height="110" rx="14" fill="#E08A2C" opacity="0.13" stroke="#E08A2C" stroke-width="1.5" stroke-opacity="0.45"/>
+  <rect class="module-card" data-mod="invest"  x="530" y="250"  width="640" height="110" rx="14" fill="#D4A823" opacity="0.13" stroke="#D4A823" stroke-width="1.5" stroke-opacity="0.45"/>
+  <rect class="module-card" data-mod="ma"      x="530" y="405"  width="640" height="110" rx="14" fill="#5B6B8C" opacity="0.13" stroke="#5B6B8C" stroke-width="1.5" stroke-opacity="0.5"/>
+  <rect class="module-card" data-mod="cash"    x="530" y="560"  width="640" height="120" rx="14" fill="#C8102E" opacity="0.13" stroke="#C8102E" stroke-width="2"   stroke-opacity="0.55"/>
+  <rect class="module-card" data-mod="wc"      x="530" y="725"  width="640" height="110" rx="14" fill="#B8542C" opacity="0.13" stroke="#B8542C" stroke-width="1.5" stroke-opacity="0.5"/>
+  <rect class="module-card" data-mod="netting" x="530" y="880"  width="640" height="110" rx="14" fill="#6B8E6F" opacity="0.15" stroke="#6B8E6F" stroke-width="1.5" stroke-opacity="0.5"/>
+  <rect class="module-card" data-mod="fx"      x="530" y="1035" width="640" height="110" rx="14" fill="#3E7B8C" opacity="0.13" stroke="#3E7B8C" stroke-width="1.5" stroke-opacity="0.5"/>
+  <rect class="module-card" data-mod="tf"      x="530" y="1190" width="640" height="110" rx="14" fill="#4A8A7A" opacity="0.13" stroke="#4A8A7A" stroke-width="1.5" stroke-opacity="0.5"/>
+  <rect class="module-card" data-mod="cc"      x="530" y="1345" width="640" height="110" rx="14" fill="#7748C8" opacity="0.13" stroke="#7748C8" stroke-width="1.5" stroke-opacity="0.5"/>
+  <rect class="module-card" data-mod="fee"     x="530" y="1500" width="640" height="110" rx="14" fill="#D6663C" opacity="0.13" stroke="#D6663C" stroke-width="1.5" stroke-opacity="0.5"/>
+  <rect class="module-card" data-mod="ics"     x="530" y="1660" width="640" height="120" rx="14" fill="#8E6FB8" opacity="0.13" stroke="#8E6FB8" stroke-width="1.5" stroke-opacity="0.5"/>
+
+  <!-- ============ MODULE LABELS & INNER TEXT (font sizes x1.5) ============ -->
+  <g font-family="'Merriweather Sans',sans-serif">
+    <g class="module-label" data-mod="icloan">
+      <text x="548" y="125" font-size="17" font-weight="700" letter-spacing="2.5" fill="#A66318">IC LOANS</text>
+    </g>
+    <g class="module-inner-text" data-mod="icloan">
+      <text x="850" y="158" text-anchor="middle" font-size="17" font-weight="600" fill="#1a1a2e">Loan workflow</text>
+      <text x="850" y="180" text-anchor="middle" font-size="13.5" fill="#505759">request · approve · book · monthly statements</text>
+    </g>
+
+    <g class="module-label" data-mod="invest">
+      <text x="548" y="280" font-size="17" font-weight="700" letter-spacing="2.5" fill="#B5891B">INVESTMENT</text>
+    </g>
+    <g class="module-inner-text" data-mod="invest">
+      <text x="850" y="313" text-anchor="middle" font-size="17" font-weight="600" fill="#1a1a2e">Trade &amp; monitor</text>
+      <text x="850" y="335" text-anchor="middle" font-size="13.5" fill="#505759">rates · positions · scenario · settlement</text>
+    </g>
+
+    <g class="module-label" data-mod="ma">
+      <text x="548" y="435" font-size="16.5" font-weight="700" letter-spacing="2.5" fill="#4A586E">M&amp;A PLANNING</text>
+    </g>
+    <g class="module-inner-text" data-mod="ma">
+      <text x="850" y="468" text-anchor="middle" font-size="17" font-weight="600" fill="#1a1a2e">Deal docs ingest</text>
+      <text x="850" y="490" text-anchor="middle" font-size="13.5" fill="#505759">AI summary → long-run forecast</text>
+    </g>
+
+    <g class="module-label" data-mod="cash">
+      <text x="548" y="590" font-size="19.5" font-weight="700" letter-spacing="2.5" fill="#8E0B20">CASH FORECAST</text>
+      <text x="548" y="608" font-size="13" font-style="italic" fill="#a86070">core integrator</text>
+    </g>
+    <g class="module-inner-text" data-mod="cash">
+      <text x="850" y="628" text-anchor="middle" font-size="18.5" font-weight="700" fill="#1a1a2e">Forecast engine</text>
+      <text x="850" y="652" text-anchor="middle" font-size="14" fill="#505759">multi-source · live · monthly snapshot · variance</text>
+    </g>
+
+    <g class="module-label" data-mod="wc">
+      <text x="548" y="755" font-size="17" font-weight="700" letter-spacing="2.5" fill="#9F4623">WORKING CAPITAL</text>
+    </g>
+    <g class="module-inner-text" data-mod="wc">
+      <text x="850" y="788" text-anchor="middle" font-size="17" font-weight="600" fill="#1a1a2e">Threshold engine</text>
+      <text x="850" y="810" text-anchor="middle" font-size="13.5" fill="#505759">daily compare · auto-funding proposals</text>
+    </g>
+
+    <g class="module-label" data-mod="netting">
+      <text x="548" y="910" font-size="17" font-weight="700" letter-spacing="2.5" fill="#355038">NETTING</text>
+    </g>
+    <g class="module-inner-text" data-mod="netting">
+      <text x="850" y="943" text-anchor="middle" font-size="17" font-weight="600" fill="#1a1a2e">Two-cycle netting</text>
+      <text x="850" y="965" text-anchor="middle" font-size="13.5" fill="#505759">estimate → adjust → final → book</text>
+    </g>
+
+    <g class="module-label" data-mod="fx">
+      <text x="548" y="1065" font-size="17" font-weight="700" letter-spacing="2.5" fill="#1F4753">FX HEDGING</text>
+    </g>
+    <g class="module-inner-text" data-mod="fx">
+      <text x="850" y="1098" text-anchor="middle" font-size="17" font-weight="600" fill="#1a1a2e">Hedge lifecycle</text>
+      <text x="850" y="1120" text-anchor="middle" font-size="13.5" fill="#505759">request · execute · settle · MTM · scenario</text>
+    </g>
+
+    <g class="module-label" data-mod="tf">
+      <text x="548" y="1220" font-size="16.5" font-weight="700" letter-spacing="2.5" fill="#3A7062">TRADE FINANCE · BG / LC</text>
+    </g>
+    <g class="module-inner-text" data-mod="tf">
+      <text x="850" y="1253" text-anchor="middle" font-size="17" font-weight="600" fill="#1a1a2e">Facility register</text>
+      <text x="850" y="1275" text-anchor="middle" font-size="13.5" fill="#505759">BG / LC · bank × entity · internal-customer queries</text>
+    </g>
+
+    <g class="module-label" data-mod="cc">
+      <text x="548" y="1375" font-size="16.5" font-weight="700" letter-spacing="2.5" fill="#5F38A0">CREDIT CARDS</text>
+    </g>
+    <g class="module-inner-text" data-mod="cc">
+      <text x="850" y="1408" text-anchor="middle" font-size="17" font-weight="600" fill="#1a1a2e">Card programs</text>
+      <text x="850" y="1430" text-anchor="middle" font-size="13.5" fill="#505759">limits · spend · self-serve lookup</text>
+    </g>
+
+    <g class="module-label" data-mod="fee">
+      <text x="548" y="1530" font-size="16.5" font-weight="700" letter-spacing="2.5" fill="#823818">BANK FEES</text>
+    </g>
+    <g class="module-inner-text" data-mod="fee">
+      <text x="850" y="1563" text-anchor="middle" font-size="17" font-weight="600" fill="#1a1a2e">Fee analyser</text>
+      <text x="850" y="1585" text-anchor="middle" font-size="13.5" fill="#505759">TWIST · normalise · cross-bank · monthly</text>
+    </g>
+
+    <g class="module-label" data-mod="ics">
+      <text x="548" y="1690" font-size="17" font-weight="700" letter-spacing="2.5" fill="#6E558E">INTERNAL CUSTOMER SERVICE</text>
+      <text x="548" y="1708" font-size="13" font-style="italic" fill="#9580ad">horizontal layer — reads every module above</text>
+    </g>
+    <g class="module-inner-text" data-mod="ics">
+      <text x="850" y="1728" text-anchor="middle" font-size="17" font-weight="600" fill="#1a1a2e">Chat · Self-Serve · KPI rollup · Directory</text>
+      <text x="850" y="1750" text-anchor="middle" font-size="13.5" fill="#505759">subsidiary master · cross-module reads · responsible-person directory</text>
+    </g>
+  </g>
+
+  <!--
+    ============================================================
+    UPSTREAM SOURCE NODES — left zone
+    Each has data-mods="..." listing all modules they feed.
+    ============================================================
+  -->
+  <g class="src" data-mods="icloan,cash,netting,fx" font-family="'Merriweather Sans',sans-serif">
+    <rect x="60" y="135" width="220" height="48" rx="8" fill="#fff" stroke="#8aabc4" stroke-width="1"/>
+    <text x="170" y="156" text-anchor="middle" font-size="16" font-weight="600" fill="#1e3a5f">Subsidiary Email</text>
+    <text x="170" y="173" text-anchor="middle" font-size="11" fill="#888">Requests · adjustments</text>
+  </g>
+  <g class="src" data-mods="icloan,invest,ma,cash,tf" font-family="'Merriweather Sans',sans-serif">
+    <rect x="60" y="220" width="220" height="46" rx="8" fill="#fff" stroke="#8aabc4" stroke-width="1"/>
+    <text x="170" y="240" text-anchor="middle" font-size="16" font-weight="600" fill="#1e3a5f">Web UI / Voice</text>
+    <text x="170" y="257" text-anchor="middle" font-size="11" fill="#888">Forms · intents · uploads</text>
+  </g>
+  <g class="src" data-mods="invest" font-family="'Merriweather Sans',sans-serif">
+    <rect x="60" y="290" width="220" height="46" rx="8" fill="#fff" stroke="#8aabc4" stroke-width="1"/>
+    <text x="170" y="310" text-anchor="middle" font-size="16" font-weight="600" fill="#1e3a5f">Corporate Intranet</text>
+    <text x="170" y="327" text-anchor="middle" font-size="11" fill="#888">Investment Policy</text>
+  </g>
+  <g class="src" data-mods="ma,cash,wc,netting,fx,tf,cc,fee,ics,invest" font-family="'Merriweather Sans',sans-serif">
+    <rect x="60" y="440" width="220" height="48" rx="8" fill="#fff" stroke="#8aabc4" stroke-width="1"/>
+    <text x="170" y="461" text-anchor="middle" font-size="16" font-weight="600" fill="#1e3a5f">SharePoint</text>
+    <text x="170" y="478" text-anchor="middle" font-size="11" fill="#888">Rules · Master · Deal docs</text>
+  </g>
+  <g class="src" data-mods="cash,wc,fee,ics" font-family="'Merriweather Sans',sans-serif">
+    <rect x="60" y="590" width="220" height="55" rx="8" fill="#fff" stroke="#7a5a3a" stroke-width="1.5"/>
+    <text x="170" y="613" text-anchor="middle" font-size="17" font-weight="700" fill="#5a3f20">Kyriba</text>
+    <text x="170" y="632" text-anchor="middle" font-size="11" fill="#7a5a3a">Cash Position · Master · TWIST</text>
+  </g>
+  <g class="src" data-mods="cash" font-family="'Merriweather Sans',sans-serif">
+    <rect x="60" y="660" width="220" height="46" rx="8" fill="#fff" stroke="#8aabc4" stroke-width="1"/>
+    <text x="170" y="680" text-anchor="middle" font-size="16" font-weight="600" fill="#1e3a5f">SCM System</text>
+    <text x="170" y="697" text-anchor="middle" font-size="11" fill="#888">Long-range purchase plans</text>
+  </g>
+  <g class="src" data-mods="cash,wc,fx,cc" font-family="'Merriweather Sans',sans-serif">
+    <rect x="60" y="755" width="220" height="46" rx="8" fill="#fff" stroke="#8aabc4" stroke-width="1"/>
+    <text x="170" y="775" text-anchor="middle" font-size="16" font-weight="600" fill="#1e3a5f">ERP</text>
+    <text x="170" y="792" text-anchor="middle" font-size="11" fill="#888">AR/AP · Expense · BS hedge</text>
+  </g>
+  <g class="src" data-mods="netting" font-family="'Merriweather Sans',sans-serif">
+    <rect x="60" y="905" width="220" height="46" rx="8" fill="#fff" stroke="#8aabc4" stroke-width="1"/>
+    <text x="170" y="925" text-anchor="middle" font-size="16" font-weight="600" fill="#1e3a5f">CoreProcess</text>
+    <text x="170" y="942" text-anchor="middle" font-size="11" fill="#888">Netting reports</text>
+  </g>
+  <g class="src" data-mods="fx" font-family="'Merriweather Sans',sans-serif">
+    <rect x="60" y="1060" width="220" height="46" rx="8" fill="#fff" stroke="#8aabc4" stroke-width="1"/>
+    <text x="170" y="1080" text-anchor="middle" font-size="16" font-weight="600" fill="#1e3a5f">FXall</text>
+    <text x="170" y="1097" text-anchor="middle" font-size="11" fill="#888">Trade confirmations · API future</text>
+  </g>
+  <g class="src" data-mods="tf,fee,fx,invest" font-family="'Merriweather Sans',sans-serif">
+    <rect x="60" y="1215" width="220" height="46" rx="8" fill="#fff" stroke="#8aabc4" stroke-width="1"/>
+    <text x="170" y="1235" text-anchor="middle" font-size="16" font-weight="600" fill="#1e3a5f">Banks</text>
+    <text x="170" y="1252" text-anchor="middle" font-size="11" fill="#888">H2H · TWIST · Email · PDF · API future</text>
+  </g>
+  <g class="src" data-mods="ics" font-family="'Merriweather Sans',sans-serif">
+    <rect x="60" y="1680" width="220" height="46" rx="8" fill="#fff" stroke="#8aabc4" stroke-width="1"/>
+    <text x="170" y="1700" text-anchor="middle" font-size="16" font-weight="600" fill="#1e3a5f">Subsidiary Master</text>
+    <text x="170" y="1717" text-anchor="middle" font-size="11" fill="#888">Directors · facilities · contacts</text>
+  </g>
+
+  <!--
+    ============================================================
+    UPSTREAM → MODULE FLOWS — each <g> tagged data-mod="<key>"
+    Stroke-width matches the module colour family.
+    ============================================================
+  -->
+
+  <!-- IC LOANS -->
+  <g class="flow" data-mod="icloan" stroke="#E08A2C" stroke-width="1.8" fill="none" opacity="0.85" marker-end="url(#arr-icloan)">
+    <path d="M 280 156 L 355 156 L 355 150 L 530 150"/>
+    <path d="M 280 240 L 355 240 L 355 160 L 530 160"/>
+  </g>
+
+  <!-- INVESTMENT -->
+  <g class="flow" data-mod="invest" stroke="#D4A823" stroke-width="1.8" fill="none" opacity="0.85" marker-end="url(#arr-invest)">
+    <path d="M 280 244 L 370 244 L 370 295 L 530 295"/>
+    <path d="M 280 310 L 370 310 L 370 305 L 530 305"/>
+    <path d="M 280 1235 L 370 1235 L 370 315 L 530 315"/>
+  </g>
+
+  <!-- M&A -->
+  <g class="flow" data-mod="ma" stroke="#5B6B8C" stroke-width="1.8" fill="none" opacity="0.85" marker-end="url(#arr-ma)">
+    <path d="M 280 248 L 385 248 L 385 450 L 530 450"/>
+    <path d="M 280 460 L 385 460 L 385 460 L 530 460"/>
+  </g>
+
+  <!-- CASH FORECAST -->
+  <g class="flow" data-mod="cash" stroke="#C8102E" stroke-width="1.8" fill="none" opacity="0.85" marker-end="url(#arr-cash)">
+    <path d="M 280 614 L 400 614 L 400 615 L 530 615"/>
+    <path d="M 280 680 L 400 680 L 400 625 L 530 625"/>
+    <path d="M 280 775 L 400 775 L 400 635 L 530 635"/>
+    <path d="M 280 464 L 400 464 L 400 645 L 530 645"/>
+    <path d="M 280 160 L 400 160 L 400 655 L 530 655"/>
+    <path d="M 280 252 L 400 252 L 400 665 L 530 665"/>
+  </g>
+
+  <!-- WORKING CAPITAL -->
+  <g class="flow" data-mod="wc" stroke="#B8542C" stroke-width="1.8" fill="none" opacity="0.85" marker-end="url(#arr-wc)">
+    <path d="M 280 618 L 415 618 L 415 770 L 530 770"/>
+    <path d="M 280 779 L 415 779 L 415 780 L 530 780"/>
+    <path d="M 280 468 L 415 468 L 415 790 L 530 790"/>
+  </g>
+
+  <!-- NETTING -->
+  <g class="flow" data-mod="netting" stroke="#6B8E6F" stroke-width="1.8" fill="none" opacity="0.85" marker-end="url(#arr-netting)">
+    <path d="M 280 925 L 430 925 L 430 920 L 530 920"/>
+    <path d="M 280 164 L 430 164 L 430 930 L 530 930"/>
+    <path d="M 280 472 L 430 472 L 430 945 L 530 945"/>
+  </g>
+
+  <!-- FX HEDGING -->
+  <g class="flow" data-mod="fx" stroke="#3E7B8C" stroke-width="1.8" fill="none" opacity="0.85" marker-end="url(#arr-fx)">
+    <path d="M 280 1080 L 445 1080 L 445 1080 L 530 1080"/>
+    <path d="M 280 168 L 445 168 L 445 1090 L 530 1090"/>
+    <path d="M 280 1239 L 445 1239 L 445 1100 L 530 1100"/>
+    <path d="M 280 476 L 445 476 L 445 1110 L 530 1110"/>
+    <path d="M 280 783 L 445 783 L 445 1120 L 530 1120"/>
+  </g>
+
+  <!-- TRADE FINANCE -->
+  <g class="flow" data-mod="tf" stroke="#4A8A7A" stroke-width="1.8" fill="none" opacity="0.85" marker-end="url(#arr-tf)">
+    <path d="M 280 1230 L 460 1230 L 460 1235 L 530 1235"/>
+    <path d="M 280 480 L 460 480 L 460 1245 L 530 1245"/>
+    <path d="M 280 256 L 460 256 L 460 1255 L 530 1255"/>
+  </g>
+
+  <!-- CREDIT CARDS -->
+  <g class="flow" data-mod="cc" stroke="#7748C8" stroke-width="1.8" fill="none" opacity="0.85" marker-end="url(#arr-cc)">
+    <path d="M 280 787 L 475 787 L 475 1400 L 530 1400"/>
+    <path d="M 280 484 L 475 484 L 475 1410 L 530 1410"/>
+  </g>
+
+  <!-- BANK FEES -->
+  <g class="flow" data-mod="fee" stroke="#D6663C" stroke-width="1.8" fill="none" opacity="0.85" marker-end="url(#arr-fee)">
+    <path d="M 280 1243 L 490 1243 L 490 1555 L 530 1555"/>
+    <path d="M 280 622 L 490 622 L 490 1565 L 530 1565"/>
+    <path d="M 280 488 L 490 488 L 490 1575 L 530 1575"/>
+  </g>
+
+  <!-- ICS upstream -->
+  <g class="flow" data-mod="ics" stroke="#8E6FB8" stroke-width="1.8" fill="none" opacity="0.85" marker-end="url(#arr-ics)">
+    <path d="M 280 1700 L 505 1700 L 505 1710 L 530 1710"/>
+    <path d="M 280 626 L 505 626 L 505 1720 L 530 1720"/>
+    <path d="M 280 492 L 505 492 L 505 1730 L 530 1730"/>
+  </g>
+
+  <!--
+    ============================================================
+    INTER-MODULE DEPENDENCY LINES — coloured by DESTINATION module
+    Tagged with BOTH source and destination via data-mods="A,B"
+    ============================================================
+  -->
+  <!-- IC Loans → Cash Forecast (red, x=465 lane) -->
+  <g class="flow" data-mods="icloan,cash" stroke="#C8102E" stroke-width="2" fill="none" opacity="0.85" stroke-linecap="round" marker-end="url(#arr-cash)">
+    <path d="M 850 205 L 850 215 L 465 215 L 465 600 L 525 600"/>
+  </g>
+  <!-- M&A → Cash Forecast (red, x=485 lane, short hop) -->
+  <g class="flow" data-mods="ma,cash" stroke="#C8102E" stroke-width="2" fill="none" opacity="0.85" stroke-linecap="round" marker-end="url(#arr-cash)">
+    <path d="M 850 515 L 850 525 L 485 525 L 485 615 L 525 615"/>
+  </g>
+  <!-- Cash Forecast → Working Capital (brick, x=485 lane downward) -->
+  <g class="flow" data-mods="cash,wc" stroke="#B8542C" stroke-width="2" fill="none" opacity="0.85" stroke-linecap="round" marker-end="url(#arr-wc)">
+    <path d="M 850 680 L 850 690 L 485 690 L 485 770 L 525 770"/>
+  </g>
+  <!-- Netting → Cash Forecast (red, x=445 lane, upward) -->
+  <g class="flow" data-mods="netting,cash" stroke="#C8102E" stroke-width="2" fill="none" opacity="0.85" stroke-linecap="round" marker-end="url(#arr-cash)">
+    <path d="M 850 880 L 850 870 L 445 870 L 445 630 L 525 630"/>
+  </g>
+  <!-- Netting → FX Hedging (teal, x=465 lane downward) -->
+  <g class="flow" data-mods="netting,fx" stroke="#3E7B8C" stroke-width="2" fill="none" opacity="0.85" stroke-linecap="round" marker-end="url(#arr-fx)">
+    <path d="M 850 990 L 850 1000 L 465 1000 L 465 1085 L 525 1085"/>
+  </g>
+
+  <text x="455" y="850" class="always-on" text-anchor="end" font-size="12" font-style="italic" fill="#888" transform="rotate(-90,455,850)">inter-module dependencies (colour = destination)</text>
+
+  <!--
+    ============================================================
+    HUB DASHBOARD (always visible) — at far right
+    ============================================================
+  -->
+  <g class="out" data-mods="icloan,invest,ma,cash,wc,netting,fx,tf,cc,fee" font-family="'Merriweather Sans',sans-serif">
+    <rect x="1380" y="100" width="280" height="320" rx="14" fill="#0e1424" stroke="#22314f" stroke-width="1.5"/>
+    <rect x="1380" y="100" width="280" height="36" rx="14" fill="#1a2542"/>
+    <rect x="1380" y="120" width="280" height="16" fill="#1a2542"/>
+    <circle cx="1396" cy="118" r="3.5" fill="#ff5f56"/>
+    <circle cx="1408" cy="118" r="3.5" fill="#ffbd2e"/>
+    <circle cx="1420" cy="118" r="3.5" fill="#27c93f"/>
+    <text x="1530" y="125" text-anchor="middle" font-size="13" font-weight="700" letter-spacing="2.5" fill="#fff">TREASURY HUB</text>
+    <!-- LIVE indicator moved to its own corner badge below the title bar -->
+    <circle cx="1605" cy="120" r="3" fill="#27c93f"/>
+    <text x="1614" y="124" font-size="8" font-weight="700" letter-spacing="1.2" fill="#27c93f">LIVE</text>
+
+    <rect x="1390" y="146" width="62" height="32" rx="4" fill="#0a1020"/>
+    <text x="1421" y="163" text-anchor="middle" font-size="13" font-weight="800" fill="#00e5ff">$284M</text>
+    <text x="1421" y="174" text-anchor="middle" font-size="7" letter-spacing="1" fill="rgba(255,255,255,0.5)">CASH POSITION</text>
+
+    <rect x="1456" y="146" width="62" height="32" rx="4" fill="#0a1020"/>
+    <text x="1487" y="163" text-anchor="middle" font-size="13" font-weight="800" fill="#4caf50">92%</text>
+    <text x="1487" y="174" text-anchor="middle" font-size="7" letter-spacing="1" fill="rgba(255,255,255,0.5)">H2H COVERAGE</text>
+
+    <rect x="1522" y="146" width="62" height="32" rx="4" fill="#0a1020"/>
+    <text x="1553" y="163" text-anchor="middle" font-size="13" font-weight="800" fill="#ff9800">78%</text>
+    <text x="1553" y="174" text-anchor="middle" font-size="7" letter-spacing="1" fill="rgba(255,255,255,0.5)">FORECAST ACC.</text>
+
+    <rect x="1588" y="146" width="62" height="32" rx="4" fill="#0a1020"/>
+    <text x="1619" y="163" text-anchor="middle" font-size="13" font-weight="800" fill="#C8102E">3</text>
+    <text x="1619" y="174" text-anchor="middle" font-size="7" letter-spacing="1" fill="rgba(255,255,255,0.5)">ALERTS</text>
+
+    <text x="1395" y="200" font-size="8.5" font-weight="700" letter-spacing="1.5" fill="rgba(255,255,255,0.7)">12-WEEK CASH FORECAST</text>
+    <polyline points="1395,235 1410,228 1425,232 1440,220 1455,215 1470,222"
+              fill="none" stroke="#00e5ff" stroke-width="1.8" stroke-linecap="round"/>
+    <polyline points="1470,222 1485,218 1500,212 1515,208 1530,204 1545,200"
+              fill="none" stroke="#7c4dff" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="3,2"/>
+    <circle cx="1470" cy="222" r="2" fill="#00e5ff"/>
+    <line x1="1470" y1="195" x2="1470" y2="240" stroke="rgba(255,255,255,0.15)" stroke-width="0.5" stroke-dasharray="2,2"/>
+    <text x="1470" y="253" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.4)">Today</text>
+
+    <text x="1555" y="200" font-size="8.5" font-weight="700" letter-spacing="1.5" fill="rgba(255,255,255,0.7)">CASH BY REGION</text>
+    <rect x="1555" y="208" width="60" height="6" rx="1.5" fill="#00e5ff" opacity="0.8"/><text x="1620" y="214" font-size="8" font-weight="700" fill="#00e5ff">APAC</text>
+    <rect x="1555" y="218" width="48" height="6" rx="1.5" fill="#4caf50" opacity="0.8"/><text x="1620" y="224" font-size="8" font-weight="700" fill="#4caf50">AMER</text>
+    <rect x="1555" y="228" width="42" height="6" rx="1.5" fill="#ff9800" opacity="0.8"/><text x="1620" y="234" font-size="8" font-weight="700" fill="#ff9800">EMEA</text>
+    <rect x="1555" y="238" width="36" height="6" rx="1.5" fill="#7c4dff" opacity="0.8"/><text x="1620" y="244" font-size="8" font-weight="700" fill="#7c4dff">JAPAN</text>
+
+    <text x="1395" y="280" font-size="8.5" font-weight="700" letter-spacing="1.5" fill="rgba(255,255,255,0.7)">FACILITY UTILISATION</text>
+    <g transform="translate(1410,304)">
+      <path d="M-15,0 A15,15 0 1,1 15,0" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"/>
+      <path d="M-15,0 A15,15 0 1,1 9,12" fill="none" stroke="#4caf50" stroke-width="3" stroke-linecap="round"/>
+      <text x="0" y="3" text-anchor="middle" font-size="9" font-weight="800" fill="#4caf50">68%</text>
+      <text x="0" y="22" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.6)">Citi</text>
+    </g>
+    <g transform="translate(1465,304)">
+      <path d="M-15,0 A15,15 0 1,1 15,0" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"/>
+      <path d="M-15,0 A15,15 0 1,1 14,5" fill="none" stroke="#C8102E" stroke-width="3" stroke-linecap="round"/>
+      <text x="0" y="3" text-anchor="middle" font-size="9" font-weight="800" fill="#C8102E">91%</text>
+      <text x="0" y="22" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.6)">HSBC</text>
+      <circle cx="12" cy="-10" r="2" fill="#C8102E"/>
+    </g>
+    <g transform="translate(1520,304)">
+      <path d="M-15,0 A15,15 0 1,1 15,0" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"/>
+      <path d="M-15,0 A15,15 0 1,1 -3,15" fill="none" stroke="#ff9800" stroke-width="3" stroke-linecap="round"/>
+      <text x="0" y="3" text-anchor="middle" font-size="9" font-weight="800" fill="#ff9800">45%</text>
+      <text x="0" y="22" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.6)">MUFG</text>
+    </g>
+
+    <text x="1575" y="280" font-size="8.5" font-weight="700" letter-spacing="1.5" fill="rgba(255,255,255,0.7)">IC LOAN PIPELINE</text>
+    <rect x="1575" y="290" width="30" height="14" rx="2" fill="rgba(0,229,255,0.18)" stroke="rgba(0,229,255,0.4)" stroke-width="0.5"/>
+    <text x="1590" y="300" text-anchor="middle" font-size="8" font-weight="700" fill="#00e5ff">$3.8M</text>
+    <rect x="1610" y="290" width="30" height="14" rx="2" fill="rgba(124,77,255,0.18)" stroke="rgba(124,77,255,0.4)" stroke-width="0.5"/>
+    <text x="1625" y="300" text-anchor="middle" font-size="8" font-weight="700" fill="#7c4dff">$12M</text>
+    <rect x="1575" y="308" width="30" height="14" rx="2" fill="rgba(255,152,0,0.18)" stroke="rgba(255,152,0,0.4)" stroke-width="0.5"/>
+    <text x="1590" y="318" text-anchor="middle" font-size="8" font-weight="700" fill="#ff9800">$5.2M</text>
+    <rect x="1610" y="308" width="30" height="14" rx="2" fill="rgba(76,175,80,0.18)" stroke="rgba(76,175,80,0.4)" stroke-width="0.5"/>
+    <text x="1625" y="318" text-anchor="middle" font-size="8" font-weight="700" fill="#4caf50">$8.5M</text>
+
+    <rect x="1390" y="343" width="260" height="22" rx="3" fill="#1a1a2e"/>
+    <circle cx="1400" cy="354" r="2.5" fill="#C8102E"/>
+    <text x="1408" y="358" font-size="9" fill="rgba(255,255,255,0.7)">HSBC OD 91% · SG FX expires 5d · JP fee +18%</text>
+
+    <text x="1395" y="383" font-size="7.5" letter-spacing="1.2" fill="rgba(255,255,255,0.35)">SOURCES: KYRIBA · ERP · H2H · CORE · FXALL</text>
+    <text x="1645" y="383" text-anchor="end" font-size="7.5" letter-spacing="1.2" fill="rgba(255,255,255,0.35)">REFRESHED 08:02 SGT</text>
+
+    <text x="1520" y="410" text-anchor="middle" font-size="12" font-weight="700" letter-spacing="2" fill="#C8102E">HUB DASHBOARD</text>
+  </g>
+
+  <!-- AUTO-EMAIL & REPORTS & KYRIBA DOWNSTREAM -->
+  <g class="out" data-mods="icloan,fx" font-family="'Merriweather Sans',sans-serif">
+    <rect x="1380" y="450" width="280" height="55" rx="8" fill="#fff" stroke="#8aabc4" stroke-width="1"/>
+    <text x="1520" y="473" text-anchor="middle" font-size="15" font-weight="600" fill="#1e3a5f">Auto-Email to Subsidiaries</text>
+    <text x="1520" y="492" text-anchor="middle" font-size="11" fill="#888">Approval results · monthly statements</text>
+  </g>
+  <g class="out" data-mods="icloan,invest,cash,fee" font-family="'Merriweather Sans',sans-serif">
+    <rect x="1380" y="520" width="280" height="55" rx="8" fill="#fff" stroke="#8aabc4" stroke-width="1"/>
+    <text x="1520" y="543" text-anchor="middle" font-size="15" font-weight="600" fill="#1e3a5f">Monthly Reports</text>
+    <text x="1520" y="562" text-anchor="middle" font-size="11" fill="#888">IC Loan · Investment · Fee · Variance</text>
+  </g>
+  <g class="out" data-mods="icloan,invest,cash,wc,netting,fx" font-family="'Merriweather Sans',sans-serif">
+    <rect x="1380" y="615" width="280" height="60" rx="8" fill="#fff" stroke="#7a5a3a" stroke-width="1.6"/>
+    <text x="1520" y="640" text-anchor="middle" font-size="16" font-weight="700" fill="#5a3f20">Kyriba</text>
+    <text x="1520" y="660" text-anchor="middle" font-size="11" fill="#7a5a3a">Approval · Booking · System-of-Record</text>
+    <text x="1520" y="690" text-anchor="middle" font-size="10.5" font-style="italic" fill="#a08868">— same system as upstream —</text>
+  </g>
+  <g class="out" data-mods="ics" font-family="'Merriweather Sans',sans-serif">
+    <rect x="1380" y="1660" width="280" height="120" rx="12" fill="#fff" stroke="#8E6FB8" stroke-width="1.8"/>
+    <text x="1520" y="1688" text-anchor="middle" font-size="15" font-weight="700" letter-spacing="2" fill="#6E558E">INTERNAL CUSTOMER UI</text>
+    <text x="1520" y="1712" text-anchor="middle" font-size="13" fill="#7c5ca8">Chat · Self-Serve · FAQ</text>
+    <text x="1520" y="1733" text-anchor="middle" font-size="13" fill="#7c5ca8">Responsible-person directory</text>
+    <text x="1520" y="1754" text-anchor="middle" font-size="13" fill="#7c5ca8">Cross-module KPI rollup</text>
+  </g>
+
+  <!-- KYRIBA "SAME SYSTEM" ARC -->
+  <path d="M 1520 615 C 1520 555, 170 555, 170 590" class="always-on" fill="none" stroke="url(#kyribaArc)" stroke-width="1.2" stroke-dasharray="4,6"/>
+
+  <!--
+    ============================================================
+    KYRIBA PAYMENT CHANNEL (always on) — central red spine
+    Module-coloured feeders are flow groups (taggable)
+    ============================================================
+  -->
+  <path id="kyribaSpine" d="M 1340 150 L 1340 1100" class="kyriba-spine" stroke="#C8102E" stroke-width="3.5" stroke-linecap="round" opacity="0.85"/>
+  <text id="kyribaSpineLabel" class="kyriba-spine" x="1348" y="625" font-size="13" font-weight="700" letter-spacing="2.5" fill="#C8102E" transform="rotate(90,1348,625)">SHARED  KYRIBA  PAYMENT  CHANNEL</text>
+
+  <g class="flow" data-mod="icloan" stroke="#E08A2C" stroke-width="2.4" fill="none" opacity="0.9" stroke-linecap="round" marker-end="url(#arr-icloan)">
+    <path d="M 1170 150 L 1340 150"/>
+  </g>
+  <g class="flow" data-mod="invest" stroke="#D4A823" stroke-width="2.4" fill="none" opacity="0.9" stroke-linecap="round" marker-end="url(#arr-invest)">
+    <path d="M 1170 305 L 1340 305"/>
+  </g>
+  <g class="flow" data-mod="cash" stroke="#C8102E" stroke-width="2.4" fill="none" opacity="0.9" stroke-linecap="round" marker-end="url(#arr-cash)">
+    <path d="M 1170 620 L 1340 620"/>
+  </g>
+  <!-- Kyriba payment spine → Kyriba (downstream) — clear visible arrow -->
+  <path d="M 1340 645 L 1374 645" class="kyriba-spine" stroke="#C8102E" stroke-width="3" fill="none" opacity="0.95" stroke-linecap="round" marker-end="url(#arr-cash-big)"/>
+  <g class="flow" data-mod="wc" stroke="#B8542C" stroke-width="2.4" fill="none" opacity="0.9" stroke-linecap="round" marker-end="url(#arr-wc)">
+    <path d="M 1170 780 L 1340 780"/>
+  </g>
+  <g class="flow" data-mod="netting" stroke="#6B8E6F" stroke-width="2.4" fill="none" opacity="0.9" stroke-linecap="round" marker-end="url(#arr-netting)">
+    <path d="M 1170 935 L 1340 935"/>
+  </g>
+  <g class="flow" data-mod="fx" stroke="#3E7B8C" stroke-width="2.4" fill="none" opacity="0.9" stroke-linecap="round" marker-end="url(#arr-fx)">
+    <path d="M 1170 1090 L 1340 1090"/>
+  </g>
+
+  <!-- MODULE → DASHBOARD lines -->
+  <g class="flow" data-mod="icloan" stroke="#E08A2C" stroke-width="1.8" fill="none" opacity="0.78" marker-end="url(#arr-icloan)">
+    <path d="M 1170 160 L 1190 160 L 1190 250 L 1380 250"/>
+    <path d="M 1170 170 L 1190 170 L 1190 475 L 1380 475"/>
+    <path d="M 1170 180 L 1190 180 L 1190 540 L 1380 540"/>
+  </g>
+  <g class="flow" data-mod="invest" stroke="#D4A823" stroke-width="1.8" fill="none" opacity="0.78" marker-end="url(#arr-invest)">
+    <path d="M 1170 315 L 1205 315 L 1205 265 L 1380 265"/>
+    <path d="M 1170 325 L 1205 325 L 1205 545 L 1380 545"/>
+  </g>
+  <g class="flow" data-mod="ma" stroke="#5B6B8C" stroke-width="1.8" fill="none" opacity="0.78" marker-end="url(#arr-ma)">
+    <path d="M 1170 460 L 1220 460 L 1220 280 L 1380 280"/>
+  </g>
+  <g class="flow" data-mod="cash" stroke="#C8102E" stroke-width="1.8" fill="none" opacity="0.78" marker-end="url(#arr-cash)">
+    <path d="M 1170 630 L 1235 630 L 1235 295 L 1380 295"/>
+    <path d="M 1170 640 L 1235 640 L 1235 550 L 1380 550"/>
+  </g>
+  <g class="flow" data-mod="wc" stroke="#B8542C" stroke-width="1.8" fill="none" opacity="0.78" marker-end="url(#arr-wc)">
+    <path d="M 1170 790 L 1250 790 L 1250 310 L 1380 310"/>
+  </g>
+  <g class="flow" data-mod="netting" stroke="#6B8E6F" stroke-width="1.8" fill="none" opacity="0.78" marker-end="url(#arr-netting)">
+    <path d="M 1170 945 L 1265 945 L 1265 325 L 1380 325"/>
+  </g>
+  <g class="flow" data-mod="fx" stroke="#3E7B8C" stroke-width="1.8" fill="none" opacity="0.78" marker-end="url(#arr-fx)">
+    <path d="M 1170 1100 L 1280 1100 L 1280 340 L 1380 340"/>
+    <path d="M 1170 1110 L 1280 1110 L 1280 480 L 1380 480"/>
+  </g>
+  <g class="flow" data-mod="tf" stroke="#4A8A7A" stroke-width="1.8" fill="none" opacity="0.78" marker-end="url(#arr-tf)">
+    <path d="M 1170 1245 L 1295 1245 L 1295 355 L 1380 355"/>
+  </g>
+  <g class="flow" data-mod="cc" stroke="#7748C8" stroke-width="1.8" fill="none" opacity="0.78" marker-end="url(#arr-cc)">
+    <path d="M 1170 1400 L 1310 1400 L 1310 370 L 1380 370"/>
+  </g>
+  <g class="flow" data-mod="fee" stroke="#D6663C" stroke-width="1.8" fill="none" opacity="0.78" marker-end="url(#arr-fee)">
+    <path d="M 1170 1555 L 1325 1555 L 1325 385 L 1380 385"/>
+    <path d="M 1170 1565 L 1325 1565 L 1325 555 L 1380 555"/>
+  </g>
+
+  <!-- ICS reads from every module (dashed vertical line) -->
+  <g class="flow" data-mod="ics" stroke="#8E6FB8" stroke-width="1.6" fill="none" opacity="0.65" stroke-dasharray="3,5">
+    <path d="M 1175 1660 L 1175 100"/>
+  </g>
+  <text x="1170" y="900" class="always-on" text-anchor="end" font-size="12" font-style="italic" fill="#8E6FB8" opacity="0.85" transform="rotate(-90,1170,900)">ICS reads every module above ▲</text>
+
+  <g class="flow" data-mod="ics" stroke="#8E6FB8" stroke-width="2.4" fill="none" opacity="0.9" marker-end="url(#arr-ics)">
+    <path d="M 1170 1720 L 1380 1720"/>
+  </g>
+
+  <!-- ============ DEMO NODES ============ -->
+  <g class="demo-node" data-mod="cc">
+    <circle class="live-halo live-1" cx="1130" cy="1390" r="14"/>
+    <circle class="live-dot live-1"  cx="1130" cy="1390" r="7"/>
+    <text x="1130" y="1422" text-anchor="middle" font-size="15" font-weight="700" letter-spacing="1.5" fill="#1e8a32">① DEMO</text>
+  </g>
+  <g class="demo-node" data-mod="ics">
+    <circle class="live-halo live-2" cx="1130" cy="1720" r="14"/>
+    <circle class="live-dot live-2"  cx="1130" cy="1720" r="7"/>
+    <text x="1130" y="1752" text-anchor="middle" font-size="15" font-weight="700" letter-spacing="1.5" fill="#1e8a32">② DEMO</text>
+  </g>
+  <g class="demo-node" data-mod="cash">
+    <circle class="live-halo live-3" cx="1130" cy="615" r="14"/>
+    <circle class="live-dot live-3"  cx="1130" cy="615" r="7"/>
+    <text x="1130" y="647" text-anchor="middle" font-size="15" font-weight="700" letter-spacing="1.5" fill="#1e8a32">③ DEMO</text>
+  </g>
+
+</svg>
     </div>
   </section>
 
@@ -1725,158 +2411,217 @@ function checkAllRead(){
     document.getElementById('solar-hint').style.opacity='0';
     document.getElementById('planet-progress').style.opacity='0';
     const sh=document.getElementById('sun-hint');
-    sh.style.opacity='1';sh.classList.add('visible');
+    sh.classList.add('visible');
   }
-}
-
-function animateCamera(tp,lt,dur,cb){
-  const sp=camera.position.clone(),sl=new THREE.Vector3();camera.getWorldDirection(sl);sl.multiplyScalar(10).add(camera.position);
-  const st=performance.now();
-  (function u(){const t=Math.min((performance.now()-st)/dur,1);const e=t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
-    camera.position.lerpVectors(sp,tp,e);camera.lookAt(new THREE.Vector3().lerpVectors(sl,lt,e));
-    if(t<1)requestAnimationFrame(u);else{camera.lookAt(lt);if(cb)cb();}
-  })();
-}
-
-function animate(){
-  if(solarSystemActive){
-    const t=performance.now()*0.001;
-
-    // Planet orbits
-    PLANET_DATA.forEach((pd,i)=>{
-      const a=pd.startAngle+t*pd.speed*2;
-      planets[i].position.set(Math.cos(a)*pd.orbit,0,Math.sin(a)*pd.orbit);
-      planets[i].rotation.y+=0.006;
-    });
-
-    // Asteroid belt rotation
-    if(asteroidBelt)asteroidBelt.rotation.y+=0.0003;
-
-    // Sun fire: vivid pulsing at different frequencies
-    if(sunGlowInner){
-      sunGlowInner.material.opacity=0.35+Math.sin(t*3.5)*0.12+Math.sin(t*8)*0.06;
-      sunGlowInner.scale.setScalar(1+Math.sin(t*2.5)*0.08);
-    }
-    if(sunGlowOuter){
-      sunGlowOuter.material.opacity=0.18+Math.sin(t*1.9+1)*0.06+Math.sin(t*5.5)*0.03;
-      sunGlowOuter.scale.setScalar(1+Math.sin(t*1.6)*0.1);
-    }
-    if(sunCorona){
-      sunCorona.material.opacity=0.08+Math.sin(t*1.2+2)*0.04;
-      sunCorona.scale.setScalar(1+Math.sin(t*0.8)*0.12);
-    }
-    // Sun core: shift between white-hot and golden
-    if(sun){
-      const warmth=Math.sin(t*2)*0.5+0.5;
-      sun.material.color.setRGB(1, 0.88+warmth*0.12, 0.65+warmth*0.2);
-    }
-
-    // Sun unlock pulse
-    if(sunUnlocked&&!sunRead){const p=0.95+Math.sin(t*3)*0.08;sun.scale.set(p,p,p);}
-
-    // Glow halos billboard toward camera
-    planetGlows.forEach(h=>{if(h.visible)h.lookAt(camera.position);});
-
-    // Glow halo pulse for unread planets — cyan fluorescent
-    planetGlows.forEach((h,i)=>{
-      if(h.visible&&!readPlanets.has(i)){
-        h.material.opacity=0.4+Math.sin(t*2.5+i*0.7)*0.18;
-      }
-    });
-    // Asteroid belt glow pulse
-    if(asteroidGlowMesh&&asteroidGlowMesh.visible){
-      asteroidGlowMesh.material.opacity=0.14+Math.sin(t*2)*0.08;
-    }
-
-    // Electric connection lines jitter
-    connectionLines.forEach(l=>{
-      if(l.userData.targetPlanet!==undefined&&!l.userData.isGlow){
-        const idx=l.userData.targetPlanet;
-        const target=planets[idx].position.clone();target.y+=0.2;
-        const origin=new THREE.Vector3(0,0.5,0);
-        const pos=l.geometry.attributes.position;
-        const segs=l.userData.segCount;
-        for(let s=0;s<=segs;s++){
-          const frac=s/segs;
-          const px=origin.x+(target.x-origin.x)*frac;
-          const py=origin.y+(target.y-origin.y)*frac;
-          const pz=origin.z+(target.z-origin.z)*frac;
-          if(s>0&&s<segs){
-            const jitter=Math.sin(frac*Math.PI)*0.25;
-            pos.setXYZ(s,px+(Math.sin(t*12+s*3+idx))*jitter,py+(Math.cos(t*10+s*2))*jitter*0.3,pz+(Math.sin(t*11+s*4+idx*2))*jitter);
-          }else{
-            pos.setXYZ(s,s===0?origin.x:target.x,s===0?origin.y:target.y,s===0?origin.z:target.z);
-          }
-        }
-        pos.needsUpdate=true;
-      }
-      // Mirror for glow lines
-      if(l.userData.isGlow&&l.userData.targetPlanet!==undefined){
-        const idx=l.userData.targetPlanet;
-        const src=connectionLines.find(cl=>cl.userData.targetPlanet===idx&&!cl.userData.isGlow);
-        if(src){
-          const srcPos=src.geometry.attributes.position;
-          const pos=l.geometry.attributes.position;
-          for(let s=0;s<=l.userData.segCount;s++){
-            pos.setXYZ(s,srcPos.getX(s),srcPos.getY(s),srcPos.getZ(s));
-          }
-          pos.needsUpdate=true;
-        }
-      }
-    });
-  }
-  renderer.render(scene,camera);requestAnimationFrame(animate);
 }
 
 function enterSolarSystem(){
-  document.getElementById('sidebar').classList.add('hidden');
-  if(!scene)initSolarSystem();
-  document.getElementById('solar-system-container').classList.add('active');
-  solarSystemActive=true;document.getElementById('deck-content').style.display='none';
-  camera.position.copy(originalCameraPos);camera.lookAt(0,0,0);
+  document.getElementById('deck-content').style.opacity='0';
+  setTimeout(()=>{
+    document.getElementById('solar-system-container').classList.add('active');
+    document.getElementById('sidebar').classList.add('hidden');
+    if(!scene){
+      initSolarSystem();
+      animate();
+      const canvas=document.getElementById('solar-canvas');
+      canvas.addEventListener('click',onCanvasClick);
+      canvas.addEventListener('mousemove',onCanvasMove);
+    }
+    solarSystemActive=true;
+  },600);
 }
 
 function exitSolarSystem(){
-  solarSystemActive=false;
   document.getElementById('solar-system-container').classList.remove('active');
-  const d=document.getElementById('deck-content');d.style.display='block';d.style.opacity='1';
   document.getElementById('sidebar').classList.remove('hidden');
-  // Unlock chapters 5-8
+  document.getElementById('deck-content').style.opacity='1';
+  solarSystemActive=false;
+  // Always unlock the rest of the deck when exiting — whether reached via the
+  // sun (after exploring all planets) or via the Skip button.
   document.querySelectorAll('.chapter-locked').forEach(el=>el.classList.remove('chapter-locked'));
   document.querySelectorAll('#sidebar a.sidebar-locked').forEach(a=>a.classList.remove('sidebar-locked'));
-  // Show ch3 scroll hint now that solar system is done
-  const ch3Hint=document.querySelector('.ch3-hint');if(ch3Hint)ch3Hint.classList.add('active');
-  setTimeout(()=>{document.getElementById('ch5').scrollIntoView({behavior:'smooth'});},100);
+  setTimeout(()=>{
+    const target = document.getElementById('ch5');
+    if(target) target.scrollIntoView({behavior:'smooth'});
+  },100);
 }
 
-// Inject scroll-down hints into every chapter section (except ch8 closing)
-function injectScrollHints(){
-  const chevrons='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 13l5 5 5-5"/><path d="M7 6l5 5 5-5"/></svg>';
-  document.querySelectorAll('.chapter-section').forEach(sec=>{
-    if(sec.querySelector('.scroll-hint'))return; // already added
-    const hint=document.createElement('div');
-    hint.className='scroll-hint'+(sec.id==='ch3'?' ch3-hint':'');
-    hint.innerHTML=chevrons+'<span>Scroll down</span>';
-    sec.appendChild(hint);
+function onCanvasMove(e){
+  if(panelOpen||isAnimating) return;
+  const rect=e.target.getBoundingClientRect();
+  mouse.x=((e.clientX-rect.left)/rect.width)*2-1;
+  mouse.y=-((e.clientY-rect.top)/rect.height)*2+1;
+  raycaster.setFromCamera(mouse,camera);
+  const hits=raycaster.intersectObjects(planetMeshes.concat([sun]));
+  document.body.style.cursor=hits.length>0?'pointer':'default';
+}
+
+function animateCamera(toPos,toLook,duration,onDone){
+  const fromPos=camera.position.clone();
+  const fromLook=new THREE.Vector3(0,0,0);
+  const start=performance.now();
+  function step(now){
+    const t=Math.min(1,(now-start)/duration);
+    const e=t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+    camera.position.lerpVectors(fromPos,toPos,e);
+    const lk=new THREE.Vector3().lerpVectors(fromLook,toLook,e);
+    camera.lookAt(lk);
+    if(t<1) requestAnimationFrame(step);
+    else if(onDone) onDone();
+  }
+  requestAnimationFrame(step);
+}
+
+let __solarStartTime = null;
+function animate(){
+  requestAnimationFrame(animate);
+  if(!solarSystemActive) return;
+  if(__solarStartTime === null) __solarStartTime = performance.now();
+  const elapsed = performance.now() - __solarStartTime;
+  if(sun){sun.rotation.y+=0.002;}
+  // planets is an array of mesh objects; each mesh has userData with startAngle, orbit, speed.
+  // We don't mutate state per-mesh — compute position from time + initial data each frame.
+  planets.forEach((mesh,i)=>{
+    if(!mesh) return;
+    const d = PLANET_DATA[i];
+    if(!d) return;
+    const angle = d.startAngle + elapsed * 0.001 * (d.speed * 60); // speed was per-frame at 60fps
+    mesh.position.x = Math.cos(angle) * d.orbit;
+    mesh.position.z = Math.sin(angle) * d.orbit;
+    mesh.rotation.y += 0.01;
+    // Keep halo facing camera
+    if(planetGlows[i]) planetGlows[i].lookAt(camera.position);
   });
+  if(asteroidBelt){asteroidBelt.rotation.y+=0.0008;}
+  if(asteroidGlowMesh){asteroidGlowMesh.rotation.z+=0.0008;}
+  renderer.render(scene,camera);
 }
-injectScrollHints();
 
-// Sidebar scroll tracking
+window.addEventListener('resize',()=>{
+  if(!camera||!renderer) return;
+  camera.aspect=window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth,window.innerHeight);
+});
+
+// Sidebar active state
 window.addEventListener('scroll',()=>{
-  if(solarSystemActive)return;
   const secs=document.querySelectorAll('.chapter-section:not(.chapter-locked),.closing-page:not(.chapter-locked)');
-  let cur='';
+  let active='';
   secs.forEach(s=>{
-    const rect=s.getBoundingClientRect();
-    if(rect.top<=150)cur=s.id;
+    const r=s.getBoundingClientRect();
+    if(r.top<window.innerHeight/2) active=s.id;
   });
   document.querySelectorAll('#sidebar a').forEach(a=>{
-    const ch=a.getAttribute('data-ch');
-    if(ch==='4'){a.classList.toggle('active',solarSystemActive);return;}
-    a.classList.toggle('active',a.getAttribute('href')==='#'+cur);
+    a.classList.toggle('active',a.getAttribute('href')==='#'+active);
   });
 });
+
 </script>
+
+<!-- ===== LIVING HUB INTERACTIVITY ===== -->
+<script>
+(function(){
+  const svg = document.getElementById('livingHub');
+  if (!svg) return;
+  let activeMod = null;
+
+  const UPSTREAM = {
+    icloan:  [],
+    invest:  [],
+    ma:      [],
+    cash:    ['icloan','ma','netting'],
+    wc:      ['cash'],
+    netting: [],
+    fx:      ['netting'],
+    tf:      [],
+    cc:      [],
+    fee:     [],
+    ics:     ['icloan','invest','ma','cash','wc','netting','fx','tf','cc','fee']
+  };
+  const DOWNSTREAM = (() => {
+    const out = {};
+    Object.keys(UPSTREAM).forEach(k => out[k] = []);
+    Object.keys(UPSTREAM).forEach(k => {
+      UPSTREAM[k].forEach(src => {
+        if (!out[src].includes(k)) out[src].push(k);
+      });
+    });
+    return out;
+  })();
+
+  function clear() {
+    svg.classList.remove('focus-active');
+    svg.querySelectorAll('.highlight, .semi-highlight').forEach(el => {
+      el.classList.remove('highlight');
+      el.classList.remove('semi-highlight');
+    });
+    activeMod = null;
+  }
+
+  function applyFocus(modKey) {
+    const matches = (el) => {
+      const m = el.getAttribute('data-mod');
+      if (m && m === modKey) return true;
+      const ms = el.getAttribute('data-mods');
+      if (ms && ms.split(',').map(s => s.trim()).includes(modKey)) return true;
+      return false;
+    };
+
+    svg.classList.add('focus-active');
+    svg.querySelectorAll('.highlight, .semi-highlight').forEach(el => {
+      el.classList.remove('highlight');
+      el.classList.remove('semi-highlight');
+    });
+
+    svg.querySelectorAll('.flow, .src, .out, .module-card, .module-label, .module-inner-text, .demo-node').forEach(el => {
+      if (matches(el)) el.classList.add('highlight');
+    });
+
+    const card = svg.querySelector('.module-card[data-mod="' + modKey + '"]');
+    if (card) card.classList.add('highlight');
+
+    const paymentModules = ['icloan','invest','cash','wc','netting','fx'];
+    if (paymentModules.includes(modKey)) {
+      svg.querySelectorAll('.kyriba-spine').forEach(el => el.classList.add('highlight'));
+    }
+
+    const siblings = [...(UPSTREAM[modKey] || []), ...(DOWNSTREAM[modKey] || [])];
+    siblings.forEach(sibKey => {
+      svg.querySelectorAll('.module-card[data-mod="' + sibKey + '"], .module-label[data-mod="' + sibKey + '"], .module-inner-text[data-mod="' + sibKey + '"]').forEach(el => {
+        if (!el.classList.contains('highlight')) {
+          el.classList.add('semi-highlight');
+        }
+      });
+    });
+
+    activeMod = modKey;
+  }
+
+  svg.querySelectorAll('.module-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const mod = card.getAttribute('data-mod');
+      if (activeMod === mod) clear();
+      else applyFocus(mod);
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!activeMod) return;
+    if (e.target.closest('.module-card')) return;
+    clear();
+  });
+
+  const resetBtn = document.getElementById('lhResetBtn');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      clear();
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
